@@ -68,10 +68,10 @@
                       <tr>
                         <th>NISN</th>
                         <th>Nama</th>
+                        <th>Jenis Kelamin</th>
                         <th>Kelas</th>
                         <th>Alamat</th>
                         <th>No HP</th>
-                        <th>Jenis Kelamin</th>
                         <th>Aksi</th>
                       </tr>
                     </thead>
@@ -79,10 +79,10 @@
                       <tr>
                         <td>351623181</td>
                         <td>Galih Restu Baihaqi</td>
+                        <td>Laki - Laki</td>
                         <td>X</td>
                         <td>Jalan Bandeng No 5 Sumenep</td>
                         <td>081939301705</td>
-                        <td>Laki - Laki</td>
                         <td>
                           <button type="button" class="btn btn-primary btn-sm">Edit</button>
                           <button type="button" class="btn btn-danger btn-sm">Hapus</button>
