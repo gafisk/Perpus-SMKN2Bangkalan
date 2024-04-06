@@ -25,7 +25,7 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="daftar-pengguna.php" class="nav-link">
                       <i class="fas fa-users nav-icon"></i>
                       <p>Daftar Pengguna</p>
                     </a>
@@ -71,7 +71,7 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="daftar-peminjaman.php" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Daftar Peminjaman</p>
                     </a>
@@ -94,7 +94,7 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="daftar-pengembalian.php" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Daftar Pengembalian</p>
                     </a>
