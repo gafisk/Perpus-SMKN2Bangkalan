@@ -66,6 +66,7 @@
                   <table id="example1" class="table table-bordered table-striped">
                     <thead>
                       <tr>
+                        <th>Kode</th>
                         <th>Kategori</th>
                         <th>Kelas</th>
                         <th>Judul</th>
@@ -78,6 +79,7 @@
                     </thead>
                     <tbody>
                       <tr>
+                        <td>1</td>
                         <td>Pendidikan</td>
                         <td>X</td>
                         <td>Belajar Grafika Komputer dengan JAVA</td>

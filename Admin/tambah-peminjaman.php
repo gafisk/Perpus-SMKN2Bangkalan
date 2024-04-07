@@ -42,7 +42,7 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0">Tambah Buku</h1>
+              <h1 class="m-0">Tambah Peminjaman</h1>
             </div>
             <!-- /.col -->
           </div>
@@ -60,39 +60,49 @@
               <!-- general form elements -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Data Buku</h3>
+                  <h3 class="card-title">Data Peminjaman</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
                 <form>
                   <div class="card-body">
                     <div class="form-group">
-                      <label>Kelas</label>
-                      <select class="form-control">
-                        <option>X</option>
-                        <option>XI</option>
-                        <option>XII</option>
+                      <label>Nama Peminjam</label>
+                      <small class="text-muted">NISN Siswa - Nama Siswa - Kelas</small>
+                      <select class="form-control select2bs4" style="width: 100%;">
+                        <option>1231 - Galih Restu Baihaqi - X</option>
+                        <option>1232 - Theresia Nazela - XII</option>
                       </select>
                     </div>
                     <div class="form-group">
-                      <label for="judul">Judul</label>
-                      <input type="text" class="form-control" id="judul" placeholder="Judul Buku">
+                      <label>Nama Buku</label>
+                      <small class="text-muted">Kode Buku - Nama Buku - Jumlah Buku</small>
+                      <select class="form-control select2bs4" style="width: 100%;">
+                        <option>1 - Belajar Algoritma Pemrograman - 9</option>
+                        <option disabled="disabled">2 - Belajar Java - 0</option>
+                      </select>
                     </div>
                     <div class="form-group">
-                      <label for="pengarang">Pengarang</label>
-                      <input type="text" class="form-control" id="pengarang" placeholder="Pengarang Buku">
-                    </div>
-                    <div class="form-group">
-                      <label for="tahun_terbit">Tahun Terbit</label>
-                      <input type="number" class="form-control" id="tahun_terbit" placeholder="Tahun Terbit Buku">
-                    </div>
-                    <div class="form-group">
-                      <label for="penerbit">Penerbit</label>
-                      <input type="text" class="form-control" id="penerbit" placeholder="Penerbit Buku">
-                    </div>
-                    <div class="form-group">
-                      <label for="jumlah">Jumlah Buku</label>
-                      <input type="number" class="form-control" id="jumlah" placeholder="Jumlah Buku">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label>Tanggal dan Waktu Pinjam</label>
+                          <div class="input-group date" id="tgl_pinjam" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#tgl_pinjam" />
+                            <div class="input-group-append" data-target="#tgl_pinjam" data-toggle="datetimepicker">
+                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <label>Tanggal dan Waktu Kembali</label>
+                          <div class="input-group date" id="tgl_kembali" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#tgl_kembali" />
+                            <div class="input-group-append" data-target="#tgl_kembali" data-toggle="datetimepicker">
+                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <!-- /.card-body -->

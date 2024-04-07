@@ -84,7 +84,6 @@
                         <td>
                           <button type="button" class="btn btn-primary btn-sm">Pengembalian</button>
                           <button type="button" class="btn btn-danger btn-sm">Hapus</button>
-                          <button type="button" class="btn btn-warning btn-sm">Detail</button>
                         </td>
                       </tr>
                       </tfoot>
