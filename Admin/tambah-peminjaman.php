@@ -85,48 +85,84 @@
                     <div class="form-group">
                       <div class="row">
                         <div class="col-md-6">
-                          <label>Tanggal dan Waktu Pinjam</label>
-                          <div class="input-group date" id="tgl_pinjam" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" data-target="#tgl_pinjam" />
-                            <div class="input-group-append" data-target="#tgl_pinjam" data-toggle="datetimepicker">
-                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                            </div>
-                          </div>
+                          <label for="tgl_pinjam">Tanggal dan Waktu Pinjam</label>
+                          <input type="date" class="form-control" id="tgl_pinjam" disabled>
                         </div>
                         <div class="col-md-6">
-                          <label>Tanggal dan Waktu Kembali</label>
-                          <div class="input-group date" id="tgl_kembali" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" data-target="#tgl_kembali" />
-                            <div class="input-group-append" data-target="#tgl_kembali" data-toggle="datetimepicker">
-                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                            </div>
-                          </div>
+                          <label for="tgl_kembali">Tanggal dan Waktu Kembali</label>
+                          <input type="date" class="form-control" id="tgl_kembali">
                         </div>
                       </div>
                     </div>
                   </div>
-                  <!-- /.card-body -->
-
-                  <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                  </div>
-                </form>
               </div>
-              <!-- /.card -->
+              <!-- /.card-body -->
 
-
+              <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
               </form>
             </div>
             <!-- /.card -->
+
+
+            </form>
           </div>
+          <!-- /.card -->
         </div>
     </div>
-    <!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
+  </div>
+  <!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
   <?php include('layouts/footer.php') ?>
 </body>
 
 </html>
+<script>
+  var nBulan = 2;
+
+  function setTanggal() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+
+    var tgl_pinjam = yyyy + '-' + mm + '-' + dd;
+    if (document.getElementById('tgl_pinjam')) {
+      document.getElementById('tgl_pinjam').value = tgl_pinjam;
+    }
+    var nextDate = new Date(today);
+    nextDate.setMonth(nextDate.getMonth() + nBulan);
+
+    var ddNext = String(nextDate.getDate()).padStart(2, '0');
+    var mmNext = String(nextDate.getMonth() + 1).padStart(2, '0');
+    var yyyyNext = nextDate.getFullYear();
+
+    var tgl_kembali = yyyyNext + '-' + mmNext + '-' + ddNext;
+    if (document.getElementById('tgl_kembali')) {
+      document.getElementById('tgl_kembali').value = tgl_kembali;
+    }
+  }
+
+  setTimeout(setTanggal, 100);
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('tgl_pinjam').addEventListener('change', function() {
+      var selectedDate = new Date(this.value);
+      var nextDate = new Date(selectedDate);
+      nextDate.setMonth(nextDate.getMonth() + nBulan);
+
+      var ddNext = String(nextDate.getDate()).padStart(2, '0');
+      var mmNext = String(nextDate.getMonth() + 1).padStart(2, '0');
+      var yyyyNext = nextDate.getFullYear();
+
+      var tgl_kembali = yyyyNext + '-' + mmNext + '-' + ddNext;
+      if (document.getElementById('tgl_kembali')) {
+        document.getElementById('tgl_kembali').value = tgl_kembali;
+      }
+    });
+  });
+</script>
