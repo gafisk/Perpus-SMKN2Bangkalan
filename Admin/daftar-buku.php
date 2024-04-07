@@ -1,3 +1,11 @@
+<?php
+session_start();
+include('../config/conn.php');
+
+$bukus = mysqli_query($conn, "SELECT * FROM buku");
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -78,21 +86,38 @@
                       </tr>
                     </thead>
                     <tbody>
+                      <?php
+                      foreach ($bukus as $buku) :
+                      ?>
+                        <tr>
+                          <td><?= $buku['kode_buku'] ?></td>
+                          <td><?= $buku['kategori_buku'] ?></td>
+                          <td><?= $buku['kelas_buku'] ?></td>
+                          <td><?= $buku['judul_buku'] ?></td>
+                          <td><?= $buku['pengarang'] ?></td>
+                          <td><?= $buku['tahun_terbit'] ?></td>
+                          <td><?= $buku['penerbit'] ?></td>
+                          <td><?= $buku['jumlah_buku'] ?></td>
+                          <td>
+                            <button type="button" class="btn btn-primary btn-sm">Edit</button>
+                            <button type="button" class="btn btn-danger btn-sm">Hapus</button>
+                          </td>
+                        </tr>
+                      <?php endforeach; ?>
+                    </tbody>
+                    <tfoot>
                       <tr>
-                        <td>1</td>
-                        <td>Pendidikan</td>
-                        <td>X</td>
-                        <td>Belajar Grafika Komputer dengan JAVA</td>
-                        <td>Galih Restu Baihaqi</td>
-                        <td>2022</td>
-                        <td>Wade Group</td>
-                        <td>12</td>
-                        <td>
-                          <button type="button" class="btn btn-primary btn-sm">Edit</button>
-                          <button type="button" class="btn btn-danger btn-sm">Hapus</button>
-                        </td>
+                        <th>Kode</th>
+                        <th>Kategori</th>
+                        <th>Kelas</th>
+                        <th>Judul</th>
+                        <th>Pengarang</th>
+                        <th>Tahun Terbit</th>
+                        <th>Penerbit</th>
+                        <th>Jumlah</th>
+                        <th>Aksi</th>
                       </tr>
-                      </tfoot>
+                    </tfoot>
                   </table>
                 </div>
                 <!-- /.card-body -->

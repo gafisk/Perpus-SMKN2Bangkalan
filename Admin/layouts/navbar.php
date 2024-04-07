@@ -66,13 +66,13 @@
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
                     <a href="tambah-peminjaman.php" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
+                      <i class="fas fa-plus nav-icon"></i>
                       <p>Tambah Peminjaman</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="daftar-peminjaman.php" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
+                      <i class="fas fa-clipboard-list nav-icon"></i>
                       <p>Daftar Peminjaman</p>
                     </a>
                   </li>
@@ -88,15 +88,26 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Tambah Pengembalian</p>
+                    <a href="daftar-pengembalian.php" class="nav-link">
+                      <i class="fas fa-clipboard-check nav-icon"></i>
+                      <p>Daftar Pengembalian</p>
                     </a>
                   </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-cog"></i>
+                  <p>
+                    Pengaturan
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
                   <li class="nav-item">
                     <a href="daftar-pengembalian.php" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Daftar Pengembalian</p>
+                      <i class="fas fa-dollar-sign nav-icon"></i>
+                      <p>Denda</p>
                     </a>
                   </li>
                 </ul>

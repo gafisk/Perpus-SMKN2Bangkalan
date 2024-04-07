@@ -71,6 +71,7 @@
                         <th>Nama Peminjam</th>
                         <th>Tanggal Pinjam</th>
                         <th>Tanggal Pengembalian</th>
+                        <th>Denda</th>
                         <th>Aksi</th>
                       </tr>
                     </thead>
@@ -81,6 +82,7 @@
                         <td>Galih Restu Baihaqi</td>
                         <td>1 Januari 2024</td>
                         <td>5 Februari 2024</td>
+                        <td>Rp. 0</td>
                         <td>
                           <button type="button" class="btn btn-danger btn-sm">Hapus</button>
                           <button type="button" class="btn btn-warning btn-sm">Detail</button>
