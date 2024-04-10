@@ -1,3 +1,43 @@
+<?php
+session_start();
+include('../config/conn.php');
+$penggunas = mysqli_query($conn, 'SELECT * FROM users');
+
+if (isset($_GET['reset'])) {
+  $id_user = mysqli_escape_string($conn, $_GET['reset']);
+  $datas = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users where id_user = '$id_user'"));
+  $ni_user = $datas['ni_user'];
+  $nama_user = $datas['nama_user'];
+  $query = mysqli_query($conn, "UPDATE users SET password = '$ni_user' where id_user = '$id_user'");
+  if ($query) {
+    $_SESSION['sukses'] = true;
+    $_SESSION['msg'] = "Password $nama_user Berhasil di Reset Menjadi No Identitas";
+  } else {
+    $_SESSION['gagal'] = true;
+    $_SESSION['msg'] = "Password $nama_user Gagal di Reset";
+  }
+  header('location:../Admin/daftar-pengguna.php');
+  exit();
+}
+if (isset($_GET['hapus'])) {
+  $id_user = mysqli_escape_string($conn, $_GET['hapus']);
+  $datas = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nama_user FROM users WHERE id_user = '$id_user'"));
+  $nama_user = $datas['nama_user'];
+  $query = mysqli_query($conn, "DELETE FROM users WHERE id_user = '$id_user'");
+  if ($query) {
+    $_SESSION['sukses'] = true;
+    $_SESSION['msg'] = "Data $nama_user Berhasil Dihapus";
+  } else {
+    $_SESSION['gagal'] = true;
+    $_SESSION['msg'] = "Data $nama_user Gagal Dihapus";
+  }
+
+  header('location:../Admin/daftar-pengguna.php');
+  exit();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -55,6 +95,29 @@
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
+          <?php if (isset($_SESSION['sukses']) && $_SESSION['sukses']) : ?>
+            <div class="alert alert-success alert-dismissible fade show" id="myAlert" role="alert">
+              <strong>Sukses</strong> <?= $_SESSION['msg'] ?>.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          <?php
+            unset($_SESSION['sukses']);
+            unset($_SESSION['msg']);
+          endif; ?>
+
+          <?php if (isset($_SESSION['gagal']) && $_SESSION['gagal']) : ?>
+            <div class="alert alert-danger alert-dismissible fade show" id="myAlert" role="alert">
+              <strong>Gagal</strong> <?= $_SESSION['msg'] ?>.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          <?php
+            unset($_SESSION['gagal']);
+            unset($_SESSION['msg']);
+          endif; ?>
           <div class="row">
             <div class="col-lg-12">
               <div class="card">
@@ -66,7 +129,8 @@
                   <table id="example1" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th>NISN</th>
+                        <th>Identitas</th>
+                        <th>Status</th>
                         <th>Nama</th>
                         <th>Jenis Kelamin</th>
                         <th>Kelas</th>
@@ -76,20 +140,37 @@
                       </tr>
                     </thead>
                     <tbody>
+                      <?php
+                      foreach ($penggunas as $pengguna) : ?>
+                        <tr>
+                          <td><?= $pengguna['ni_user'] ?></td>
+                          <td><?= $pengguna['role_user'] ?></td>
+                          <td><?= $pengguna['nama_user'] ?></td>
+                          <td><?= $pengguna['jk_user'] ?></td>
+                          <td><?= $pengguna['kelas_user'] ?></td>
+                          <td><?= $pengguna['alamat_user'] ?></td>
+                          <td><?= $pengguna['telp_user'] ?></td>
+                          <td style="width: 100px;">
+                            <a type="button" href="edit-pengguna.php?id=<?= $pengguna['id_user'] ?>" class=" btn btn-primary btn-sm d-inlinse"><i class='fas fa-pencil-alt'></i></a>
+                            <a href="?hapus=<?= $pengguna['id_user'] ?>" onclick="confirm(`Anda Yakin Ingin Menghapus Data <?= $pengguna['nama_user'] ?>`)" type="button" class="btn btn-danger btn-sm d-inline"><i class='fas fa-trash-alt'></i></a>
+                            <a href="?reset=<?= $pengguna['id_user'] ?>" onclick="confirm(`Anda Yakin Ingin Mereset Password <?= $pengguna['nama_user'] ?>`)" type="button" class="btn btn-warning btn-sm d-inline"><i class='fas fa-key'></i></a>
+                          </td>
+                        </tr>
+                      <?php
+                      endforeach ?>
+                    </tbody>
+                    <tfoot>
                       <tr>
-                        <td>351623181</td>
-                        <td>Galih Restu Baihaqi</td>
-                        <td>Laki - Laki</td>
-                        <td>X</td>
-                        <td>Jalan Bandeng No 5 Sumenep</td>
-                        <td>081939301705</td>
-                        <td>
-                          <button type="button" class="btn btn-primary btn-sm">Edit</button>
-                          <button type="button" class="btn btn-danger btn-sm">Hapus</button>
-                          <button type="button" class="btn btn-warning btn-sm">Reset</button>
-                        </td>
+                        <th>Identitas</th>
+                        <th>Status</th>
+                        <th>Nama</th>
+                        <th>Jenis Kelamin</th>
+                        <th>Kelas</th>
+                        <th>Alamat</th>
+                        <th>No HP</th>
+                        <th>Aksi</th>
                       </tr>
-                      </tfoot>
+                    </tfoot>
                   </table>
                 </div>
                 <!-- /.card-body -->
@@ -106,3 +187,12 @@
 </body>
 
 </html>
+<script>
+  // Ambil elemen alert
+  var alert = document.getElementById('myAlert');
+
+  // Tutup alert setelah 3 detik
+  setTimeout(function() {
+    alert.style.display = 'none';
+  }, 10000);
+</script>

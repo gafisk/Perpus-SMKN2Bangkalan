@@ -1,29 +1,32 @@
 <?php
 session_start();
 include('../config/conn.php');
-if (isset($_POST['submit'])) {
-  $id_user = NULL;
-  $ni_user = mysqli_escape_string($conn, $_POST['identitas']);
-  $nama_user = mysqli_escape_string($conn, $_POST['nama']);
-  $jk_user = mysqli_escape_string($conn, $_POST['jk']);
-  $kelas_user = mysqli_escape_string($conn, $_POST['kelas']);
-  $alamat_user = mysqli_escape_string($conn, $_POST['alamat']);
-  $telp_user = mysqli_escape_string($conn, $_POST['notelp']);
-  $username = mysqli_escape_string($conn, $_POST['identitas']);
-  $password = mysqli_escape_string($conn, $_POST['identitas']);
-  $role_user = mysqli_escape_string($conn, $_POST['status']);
-  if (empty($ni_user) || empty($nama_user) || empty($jk_user) || empty($alamat_user) || empty($telp_user) || empty($username) || empty($password) || empty($role_user)) {
-    echo "<script>alert('Kolom Inputan Data Tidak Boleh Kosong!');</script>";
-  } else {
-    $query = mysqli_query($conn, "INSERT INTO users VALUES ('$id_user', '$ni_user', '$nama_user', '$jk_user', '$kelas_user', '$alamat_user', '$telp_user', '$username', '$password', '$role_user')");
-    if ($query) {
-      $_SESSION['sukses'] = true;
-      $_SESSION['msg'] = "Data Berhasil di Tambahkan ke Database";
+
+if (isset($_GET['id'])) {
+  $id_user = mysqli_escape_string($conn, $_GET['id']);
+  $datas = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id_user = '$id_user'"));
+  if (isset($_POST['submit'])) {
+    $ni_user = mysqli_escape_string($conn, $_POST['identitas']);
+    $nama_user = mysqli_escape_string($conn, $_POST['nama']);
+    $jk_user = mysqli_escape_string($conn, $_POST['jk']);
+    $kelas_user = mysqli_escape_string($conn, $_POST['kelas']);
+    $alamat_user = mysqli_escape_string($conn, $_POST['alamat']);
+    $telp_user = mysqli_escape_string($conn, $_POST['notelp']);
+    $role_user = mysqli_escape_string($conn, $_POST['status']);
+
+    if (empty($ni_user) || empty($nama_user) || empty($jk_user) || empty($telp_user) || empty($alamat_user) || empty($role_user)) {
+      echo "<script>alert('Kolom Inputan Data Tidak Boleh Kosong!');</script>";
     } else {
-      $_SESSION['gagal'] = true;
-      $_SESSION['msg'] = "Data Gagal di Tambahkan ke Database";
+      $query = mysqli_query($conn, "UPDATE users SET ni_user = '$ni_user', nama_user = '$nama_user', jk_user = '$jk_user', kelas_user = '$kelas_user', alamat_user = '$alamat_user', telp_user = '$telp_user', role_user = '$role_user' WHERE id_user='$id_user'");
+      if ($query) {
+        $_SESSION['sukses'] = true;
+        $_SESSION['msg'] = "Data $nama_user Berhasil Diedit";
+      } else {
+        $_SESSION['gagal'] = true;
+        $_SESSION['msg'] = "Data $nama_user Gagal Diedit";
+      }
+      header('location:../Admin/daftar-pengguna.php');
     }
-    header('location:../Admin/daftar-pengguna.php');
   }
 }
 ?>
@@ -73,7 +76,7 @@ if (isset($_POST['submit'])) {
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0">Tambah Pengguna</h1>
+              <h1 class="m-0">Edit Pengguna</h1>
             </div>
             <!-- /.col -->
           </div>
@@ -91,7 +94,7 @@ if (isset($_POST['submit'])) {
               <!-- general form elements -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Data Pengguna</h3>
+                  <h3 class="card-title">Edit Data Pengguna</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
@@ -100,41 +103,41 @@ if (isset($_POST['submit'])) {
                     <div class="form-group">
                       <label for="role">Status</label>
                       <select id="role" name="status" class="form-control">
-                        <option>Guru</option>
-                        <option>Siswa</option>
+                        <option <?= ($datas['role_user'] == 'Guru') ? 'selected' : '' ?>>Guru</option>
+                        <option <?= ($datas['role_user'] == 'Siswa') ? 'selected' : '' ?>>Siswa</option>
                       </select>
                     </div>
                     <div class="form-group">
                       <label for="ni">Nomor Identitas</label>
-                      <input type="text" name="identitas" class="form-control" id="ni" placeholder="Identitas Pengguna">
+                      <input type="text" name="identitas" class="form-control" id="ni" placeholder="Identitas Pengguna" value="<?= $datas['ni_user'] ?>">
                     </div>
                     <div class="form-group">
                       <label for="nama">Nama</label>
-                      <input type="text" name="nama" class="form-control" id="nama" placeholder="Nama Pengguna">
+                      <input type="text" name="nama" class="form-control" id="nama" placeholder="Nama Pengguna" value="<?= $datas['nama_user'] ?>">
                     </div>
                     <div class="form-group">
                       <label for="jk">Jenis Kelamin</label>
                       <select id="jk" name="jk" class="form-control">
-                        <option>Laki - laki</option>
-                        <option>Perempuan</option>
+                        <option <?= ($datas['jk_user'] == 'Laki - laki') ? 'selected' : '' ?>>Laki - laki</option>
+                        <option <?= ($datas['jk_user'] == 'Perempuan') ? 'selected' : '' ?>>Perempuan</option>
                       </select>
                     </div>
                     <div class="form-group">
                       <label for="kelas">Kelas</label>
                       <select id="kelas" name="kelas" class="form-control">
-                        <option value="">Tidak Ada Kelas</option>
-                        <option>X</option>
-                        <option>XI</option>
-                        <option>XII</option>
+                        <option <?= ($datas['role_user'] == '') ? 'selected' : '' ?> value="">Tidak Ada Kelas</option>
+                        <option <?= ($datas['kelas_user'] == 'X') ? 'selected' : '' ?>>X</option>
+                        <option <?= ($datas['kelas_user'] == 'XI') ? 'selected' : '' ?>>XI</option>
+                        <option <?= ($datas['kelas_user'] == 'XII') ? 'selected' : '' ?>>XII</option>
                       </select>
                     </div>
                     <div class="form-group">
                       <label>Alamat</label>
-                      <textarea class="form-control" name="alamat" rows="3" placeholder="Alamat Pengguna"></textarea>
+                      <textarea class="form-control" name="alamat" rows="3" placeholder="Alamat Pengguna"><?= $datas['alamat_user'] ?></textarea>
                     </div>
                     <div class="form-group">
                       <label for="no_telp">Nomor Telepon</label>
-                      <input type="text" name="notelp" class="form-control" id="no_telp" placeholder="Nomor Telepon Pengguna">
+                      <input type="text" name="notelp" class="form-control" id="no_telp" placeholder="Nomor Telepon Pengguna" value="<?= $datas['telp_user'] ?>">
                     </div>
                   </div>
                   <!-- /.card-body -->
@@ -164,7 +167,7 @@ if (isset($_POST['submit'])) {
 </html>
 <script>
   function konfirmSubmit() {
-    var konfirmasi = confirm("Apakah Anda yakin ingin menyimpan data?");
+    var konfirmasi = confirm("Apakah Anda yakin ingin mengedit data?");
     if (konfirmasi) {
       return true;
     } else {

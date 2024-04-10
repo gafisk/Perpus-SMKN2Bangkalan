@@ -4,6 +4,21 @@ include('../config/conn.php');
 
 $bukus = mysqli_query($conn, "SELECT * FROM buku");
 
+if (isset($_GET['hapus'])) {
+  $id_buku = mysqli_escape_string($conn, $_GET['hapus']);
+  $query = mysqli_query($conn, "DELETE FROM buku WHERE id_buku = '$id_buku'");
+
+  if ($query) {
+    $_SESSION['sukses'] = true;
+    $_SESSION['msg'] = "Data Berhasil Dihapus";
+  } else {
+    $_SESSION['gagal'] = true;
+    $_SESSION['msg'] = "Data Gagal Dihapus";
+  }
+  header('location: ../Admin/daftar-buku.php');
+  exit();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -63,6 +78,38 @@ $bukus = mysqli_query($conn, "SELECT * FROM buku");
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
+          <?php if (isset($_SESSION['sukses']) && $_SESSION['sukses']) : ?>
+            <div class="alert alert-success alert-dismissible fade show" id="myAlert" role="alert">
+              <strong>Sukses</strong> Data Berhasil di Simpan.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          <?php
+            unset($_SESSION['sukses']);
+          endif; ?>
+
+          <?php if (isset($_SESSION['edit']) && $_SESSION['edit']) : ?>
+            <div class="alert alert-success alert-dismissible fade show" id="myAlert" role="alert">
+              <strong>Sukses</strong> Data Berhasil di Edit.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          <?php
+            unset($_SESSION['edit']);
+          endif; ?>
+
+          <?php if (isset($_SESSION['gagal']) && $_SESSION['gagal']) : ?>
+            <div class="alert alert-danger alert-dismissible fade show" id="myAlert" role="alert">
+              <strong>Gagal</strong> Data Gagal di Simpan.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          <?php
+            unset($_SESSION['gagal']);
+          endif; ?>
           <div class="row">
             <div class="col-lg-12">
               <div class="card">
@@ -99,8 +146,8 @@ $bukus = mysqli_query($conn, "SELECT * FROM buku");
                           <td><?= $buku['penerbit'] ?></td>
                           <td><?= $buku['jumlah_buku'] ?></td>
                           <td>
-                            <button type="button" class="btn btn-primary btn-sm">Edit</button>
-                            <button type="button" class="btn btn-danger btn-sm">Hapus</button>
+                            <a type="button" href="edit-buku.php?id=<?= $buku['id_buku'] ?>" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="?hapus=<?= $buku['id_buku'] ?>" type="button" class="btn btn-danger btn-sm" onclick="confirm('Anda Yakin Akan Menghapus Data?')">Hapus</a>
                           </td>
                         </tr>
                       <?php endforeach; ?>
@@ -134,3 +181,12 @@ $bukus = mysqli_query($conn, "SELECT * FROM buku");
 </body>
 
 </html>
+<script>
+  // Ambil elemen alert
+  var alert = document.getElementById('myAlert');
+
+  // Tutup alert setelah 3 detik
+  setTimeout(function() {
+    alert.style.display = 'none';
+  }, 10000);
+</script>

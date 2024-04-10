@@ -1,3 +1,10 @@
+<?php
+session_start();
+include('../config/conn.php');
+$datas = mysqli_query($conn, "SELECT pengembalian.*, transaksi.*, CASE WHEN pengembalian.tgl_serah > transaksi.tanggal_kembali THEN DATEDIFF(pengembalian.tgl_serah, transaksi.tanggal_kembali) ELSE 0 END AS hari_telat FROM pengembalian INNER JOIN transaksi ON pengembalian.id_transaksi = transaksi.id_transaksi INNER JOIN buku ON transaksi.id_buku = buku.id_buku;");
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -70,25 +77,30 @@
                         <th>Nama Buku</th>
                         <th>Nama Peminjam</th>
                         <th>Tanggal Pinjam</th>
+                        <th>Jatuh Tempo</th>
                         <th>Tanggal Pengembalian</th>
-                        <th>Denda</th>
+                        <th>Telat</th>
+                        <th style="width: 80px;">Denda</th>
                         <th>Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>Belajar Grafika Komputer</td>
-                        <td>Galih Restu Baihaqi</td>
-                        <td>1 Januari 2024</td>
-                        <td>5 Februari 2024</td>
-                        <td>Rp. 0</td>
-                        <td>
-                          <button type="button" class="btn btn-danger btn-sm">Hapus</button>
-                          <button type="button" class="btn btn-warning btn-sm">Detail</button>
-                        </td>
-                      </tr>
-                      </tfoot>
+                      <?php foreach ($datas as $data) : ?>
+                        <tr>
+                          <td><?= $data['kode_transaksi'] ?></td>
+                          <td><?= $data['judul_buku'] ?></td>
+                          <td><?= $data['nama_user'] ?></td>
+                          <td><?= $data['tanggal_pinjam'] ?></td>
+                          <td><?= $data['tanggal_kembali'] ?></td>
+                          <td><?= $data['tgl_serah'] ?></td>
+                          <td><?= $data['hari_telat'] ?> Hari </td>
+                          <td>Rp. <?= $data['denda'] ?></td>
+                          <td>
+                            <button type="button" class="btn btn-danger btn-sm">Hapus</button>
+                          </td>
+                        <?php endforeach ?>
+                        </tr>
+                        </tfoot>
                   </table>
                 </div>
                 <!-- /.card-body -->

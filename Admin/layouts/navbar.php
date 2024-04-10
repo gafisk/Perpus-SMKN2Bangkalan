@@ -105,7 +105,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="daftar-pengembalian.php" class="nav-link">
+                    <a href="denda.php" class="nav-link">
                       <i class="fas fa-dollar-sign nav-icon"></i>
                       <p>Denda</p>
                     </a>

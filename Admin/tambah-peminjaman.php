@@ -1,3 +1,39 @@
+<?php
+session_start();
+include('../config/conn.php');
+$users = mysqli_query($conn, "SELECT * FROM users");
+$bukus = mysqli_query($conn, "SELECT * FROM buku");
+
+if (isset($_POST['submit'])) {
+  $id_transaksi = NULL;
+  $kode_transaksi = get_code_transaksi();
+  $id_admin = 1;
+  $id_user = mysqli_escape_string($conn, $_POST['peminjam']);
+  $id_buku = mysqli_escape_string($conn, $_POST['buku']);
+  $tanggal_kembali = mysqli_escape_string($conn, $_POST['tgl_kembali']);
+  $status = 'Pinjam';
+
+  if (empty($id_user) || empty($id_buku)) {
+    echo "<script>alert('Kolom Inputan Data Tidak Boleh Kosong!');</script>";
+  } else {
+    $query = mysqli_query($conn, "INSERT INTO transaksi VALUES ('$id_transaksi', '$kode_transaksi', '$id_admin', '$id_user', '$id_buku', NOW(), '$tanggal_kembali', '$status')");
+    if ($query) {
+      $kurangi_buku = mysqli_query($conn, "UPDATE buku SET jumlah_buku = jumlah_buku - 1 WHERE id_buku = '$id_buku'");
+      if ($kurangi_buku) {
+        $_SESSION['sukses'] = true;
+        $_SESSION['msg'] = "Data Peminjaman Berhasil Disimpan";
+      } else {
+        $_SESSION['gagal'] = true;
+        $_SESSION['msg'] = "Data Peminjaman Gagal Disimpan";
+      }
+    }
+    header('location:../Admin/daftar-peminjaman.php');
+    exit();
+  }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -64,33 +100,39 @@
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form>
+                <form method="POST" action="">
                   <div class="card-body">
                     <div class="form-group">
                       <label>Nama Peminjam</label>
-                      <small class="text-muted">NISN Siswa - Nama Siswa - Kelas</small>
-                      <select class="form-control select2bs4" style="width: 100%;">
-                        <option>1231 - Galih Restu Baihaqi - X</option>
-                        <option>1232 - Theresia Nazela - XII</option>
+                      <small class="text-muted">Identitas - Nama - Kelas</small>
+                      <select name="peminjam" class="form-control select2bs4" style="width: 100%;">
+                        <option value="">Pilih Data Peminjam</option>
+                        <?php foreach ($users as $user) : ?>
+                          <option value="<?= $user['id_user'] ?>">
+                            <?= $user['ni_user'] ?> - <?= $user['nama_user'] ?> - <?= $user['kelas_user'] ?></option>
+                        <?php endforeach; ?>
                       </select>
                     </div>
                     <div class="form-group">
                       <label>Nama Buku</label>
                       <small class="text-muted">Kode Buku - Nama Buku - Jumlah Buku</small>
-                      <select class="form-control select2bs4" style="width: 100%;">
-                        <option>1 - Belajar Algoritma Pemrograman - 9</option>
-                        <option disabled="disabled">2 - Belajar Java - 0</option>
+                      <select name="buku" class="form-control select2bs4" style="width: 100%;">
+                        <option value="">Pilih Data Buku</option>
+                        <?php foreach ($bukus as $buku) : ?>
+                          <option <?= ($buku["jumlah_buku"] == 0) ? "disabled='disabled'" : "" ?> value="<?= $buku['id_buku'] ?>"><?= $buku['kode_buku'] ?> - <?= $buku['judul_buku'] ?> -
+                            <?= $buku['jumlah_buku'] ?> </option>
+                        <?php endforeach; ?>
                       </select>
                     </div>
                     <div class="form-group">
                       <div class="row">
                         <div class="col-md-6">
                           <label for="tgl_pinjam">Tanggal dan Waktu Pinjam</label>
-                          <input type="date" class="form-control" id="tgl_pinjam" disabled>
+                          <input name="tgl_pinjam" type="date" class="form-control" id="tgl_pinjam" disabled>
                         </div>
                         <div class="col-md-6">
                           <label for="tgl_kembali">Tanggal dan Waktu Kembali</label>
-                          <input type="date" class="form-control" id="tgl_kembali">
+                          <input name="tgl_kembali" type="date" class="form-control" id="tgl_kembali">
                         </div>
                       </div>
                     </div>
@@ -99,7 +141,7 @@
               <!-- /.card-body -->
 
               <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" name="submit" class="btn btn-primary" onclick="konfirmSubmit()">Submit</button>
               </div>
               </form>
             </div>
@@ -124,24 +166,25 @@
 <script>
   var nBulan = 2;
 
+  function formatDate(date) {
+    var dd = String(date.getDate()).padStart(2, '0');
+    var mm = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
+    var yyyy = date.getFullYear();
+    return yyyy + '-' + mm + '-' + dd;
+  }
+
   function setTanggal() {
     var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0');
-    var yyyy = today.getFullYear();
+    var tgl_pinjam = formatDate(today); // 'YYYY-MM-DD'
 
-    var tgl_pinjam = yyyy + '-' + mm + '-' + dd;
     if (document.getElementById('tgl_pinjam')) {
       document.getElementById('tgl_pinjam').value = tgl_pinjam;
     }
+
     var nextDate = new Date(today);
     nextDate.setMonth(nextDate.getMonth() + nBulan);
+    var tgl_kembali = formatDate(nextDate); // 'YYYY-MM-DD'
 
-    var ddNext = String(nextDate.getDate()).padStart(2, '0');
-    var mmNext = String(nextDate.getMonth() + 1).padStart(2, '0');
-    var yyyyNext = nextDate.getFullYear();
-
-    var tgl_kembali = yyyyNext + '-' + mmNext + '-' + ddNext;
     if (document.getElementById('tgl_kembali')) {
       document.getElementById('tgl_kembali').value = tgl_kembali;
     }
@@ -154,15 +197,22 @@
       var selectedDate = new Date(this.value);
       var nextDate = new Date(selectedDate);
       nextDate.setMonth(nextDate.getMonth() + nBulan);
+      var tgl_kembali = formatDate(nextDate); // 'YYYY-MM-DD'
 
-      var ddNext = String(nextDate.getDate()).padStart(2, '0');
-      var mmNext = String(nextDate.getMonth() + 1).padStart(2, '0');
-      var yyyyNext = nextDate.getFullYear();
-
-      var tgl_kembali = yyyyNext + '-' + mmNext + '-' + ddNext;
       if (document.getElementById('tgl_kembali')) {
         document.getElementById('tgl_kembali').value = tgl_kembali;
       }
     });
   });
+
+
+
+  function konfirmSubmit() {
+    var konfirmasi = confirm("Apakah Anda yakin ingin menyimpan data?");
+    if (konfirmasi) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 </script>

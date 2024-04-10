@@ -2,29 +2,30 @@
 session_start();
 include('../config/conn.php');
 
-if (isset($_POST['submit'])) {
+if (isset($_GET['id'])) {
+  $id_buku = mysqli_escape_string($conn, $_GET['id']);
+  $datas = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM buku WHERE id_buku = '$id_buku'"));
+  if (isset($_POST['submit'])) {
+    $kode_buku = mysqli_escape_string($conn, $_POST['kode_buku']);
+    $kategori_buku = mysqli_escape_string($conn, $_POST['kategori_buku']);
+    $kelas = mysqli_escape_string($conn, $_POST['kelas']);
+    $judul = mysqli_escape_string($conn, $_POST['judul']);
+    $pengarang = mysqli_escape_string($conn, $_POST['pengarang']);
+    $thn_terbit = mysqli_escape_string($conn, $_POST['thn_terbit']);
+    $penerbit = mysqli_escape_string($conn, $_POST['penerbit']);
+    $jumlah_buku = mysqli_escape_string($conn, $_POST['jml_buku']);
 
-  $id_buku = NULL;
-  $kode_buku = mysqli_escape_string($conn, get_code_buku(strtolower('Pendidikan'))[0]);
-  $kategori_buku = mysqli_escape_string($conn, get_code_buku(strtolower('Pendidikan'))[1]);
-  $kelas = mysqli_escape_string($conn, $_POST['kelas']);
-  $judul = mysqli_escape_string($conn, $_POST['judul']);
-  $pengarang = mysqli_escape_string($conn, $_POST['pengarang']);
-  $thn_terbit = mysqli_escape_string($conn, $_POST['thn_terbit']);
-  $penerbit = mysqli_escape_string($conn, $_POST['penerbit']);
-  $jumlah_buku = mysqli_escape_string($conn, $_POST['jml_buku']);
-
-  if (empty($judul) || empty($pengarang) || empty($thn_terbit) || empty($penerbit) || empty($jumlah_buku)) {
-    echo "<script>alert('Kolom Inputan Data Buku Tidak Boleh Kosong!');</script>";
-  } else {
-    $query = mysqli_query($conn, "INSERT INTO buku VALUES ('$id_buku', '$kode_buku', '$kategori_buku', '$kelas', '$judul', '$pengarang', '$thn_terbit', '$penerbit', '$jumlah_buku')");
-
-    if ($query) {
-      $_SESSION['sukses'] = true;
+    if (empty($judul) || empty($pengarang) || empty($thn_terbit) || empty($penerbit) || empty($jumlah_buku)) {
+      echo "<script>alert('Kolom Inputan Data Buku Tidak Boleh Kosong!');</script>";
     } else {
-      $_SESSION['gagal'] = true;
+      $query = mysqli_query($conn, "UPDATE buku SET kelas_buku = '$kelas', judul_buku = '$judul', pengarang = '$pengarang', tahun_terbit = '$thn_terbit', penerbit = '$penerbit', jumlah_buku = '$jumlah_buku' WHERE id_buku = '$id_buku'");
+      if ($query) {
+        $_SESSION['edit'] = true;
+      } else {
+        $_SESSION['gagal'] = true;
+      }
+      header('location:../Admin/daftar-buku.php');
     }
-    header('location:../Admin/daftar-buku.php');
   }
 }
 
@@ -74,7 +75,7 @@ if (isset($_POST['submit'])) {
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0">Tambah Buku</h1>
+              <h1 class="m-0">Edit Data Buku</h1>
             </div>
             <!-- /.col -->
           </div>
@@ -100,33 +101,41 @@ if (isset($_POST['submit'])) {
                 <form method="post" action="">
                   <div class="card-body">
                     <div class="form-group">
+                      <label for="kode_buku">Kode Buku</label>
+                      <input type="text" name="kode_buku" class="form-control" id="kode_buku" value="<?= $datas['kode_buku'] ?>" disabled>
+                    </div>
+                    <div class="form-group">
+                      <label for="kategori">Kategori Buku</label>
+                      <input type="text" name="kategori_buku" class="form-control" id="kategori" value="<?= $datas['kategori_buku'] ?>" disabled>
+                    </div>
+                    <div class="form-group">
                       <label>Kelas</label>
                       <select class="form-control" name="kelas">
-                        <option value="">Tidak Ada Kelas</option>
-                        <option>X</option>
-                        <option>XI</option>
-                        <option>XII</option>
+                        <option value="" <?= ($datas['kelas_buku'] == '') ? 'selected' : ''; ?>>Tidak Ada Kelas</option>
+                        <option <?= ($datas['kelas_buku'] == 'X') ? 'selected' : ''; ?>>X</option>
+                        <option <?= ($datas['kelas_buku'] == 'XI') ? 'selected' : ''; ?>>XI</option>
+                        <option <?= ($datas['kelas_buku'] == 'XII') ? 'selected' : ''; ?>>XII</option>
                       </select>
                     </div>
                     <div class="form-group">
                       <label for="judul">Judul</label>
-                      <input type="text" name="judul" class="form-control" id="judul" placeholder="Judul Buku">
+                      <input type="text" name="judul" class="form-control" id="judul" placeholder="Judul Buku" value="<?= $datas['judul_buku'] ?>">
                     </div>
                     <div class="form-group">
                       <label for="pengarang">Pengarang</label>
-                      <input type="text" name="pengarang" class="form-control" id="pengarang" placeholder="Pengarang Buku">
+                      <input type="text" name="pengarang" class="form-control" id="pengarang" placeholder="Pengarang Buku" value="<?= $datas['pengarang'] ?>">
                     </div>
                     <div class="form-group">
                       <label for="tahun_terbit">Tahun Terbit</label>
-                      <input type="number" name="thn_terbit" class="form-control" id="tahun_terbit" placeholder="Tahun Terbit Buku">
+                      <input type="number" name="thn_terbit" class="form-control" id="tahun_terbit" placeholder="Tahun Terbit Buku" value="<?= $datas['tahun_terbit'] ?>">
                     </div>
                     <div class="form-group">
                       <label for="penerbit">Penerbit</label>
-                      <input type="text" name="penerbit" class="form-control" id="penerbit" placeholder="Penerbit Buku">
+                      <input type="text" name="penerbit" class="form-control" id="penerbit" placeholder="Penerbit Buku" value="<?= $datas['penerbit'] ?>">
                     </div>
                     <div class="form-group">
                       <label for="jumlah">Jumlah Buku</label>
-                      <input type="number" name="jml_buku" class="form-control" id="jumlah" placeholder="Jumlah Buku">
+                      <input type="number" name="jml_buku" class="form-control" id="jumlah" placeholder="Jumlah Buku" value="<?= $datas['jumlah_buku'] ?>">
                     </div>
                   </div>
                   <!-- /.card-body -->
@@ -155,7 +164,7 @@ if (isset($_POST['submit'])) {
 </html>
 <script>
   function konfirmSubmit() {
-    var konfirmasi = confirm("Apakah Anda yakin ingin menyimpan data?");
+    var konfirmasi = confirm("Apakah Anda yakin ingin Mengedit data?");
     if (konfirmasi) {
       return true;
     } else {
