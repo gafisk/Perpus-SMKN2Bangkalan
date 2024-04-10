@@ -1,0 +1,10 @@
+Admin = Fitur Denda
+        Logout
+        Insert ke Transaksi, ID Admin Belum Dinamis
+
+Users = Tampilan
+        Fitur Meminjam buku
+        Melihat Apa Saja Buku Yang Dipinjam
+
+Main =  Fitur Login
+        Tampilan Halaman Awal
