@@ -1,49 +1,26 @@
 <?php
 session_start();
 include('../config/conn.php');
-if (!isset($_SESSION['id_admin']) || empty($_SESSION['id_admin'])) {
+if (!isset($_SESSION['id_user']) || empty($_SESSION['id_user'])) {
   echo '<script>alert("Silahkan Login Dahulu");</script>';
-  header('Refresh: 1; URL=login_admin.php');
+  header('Refresh: 1; URL=../login.php');
   exit(); // Hentikan eksekusi script setelah mengarahkan ke halaman login
 }
 
+$bukus = mysqli_query($conn, "SELECT * FROM buku");
 
-$penggunas = mysqli_query($conn, 'SELECT * FROM users');
-
-if (isset($_GET['reset'])) {
-  $id_user = mysqli_escape_string($conn, $_GET['reset']);
-  $datas = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users where id_user = '$id_user'"));
-  $ni_user = $datas['ni_user'];
-  $nama_user = $datas['nama_user'];
-  tambah_log($_SESSION['id_admin'], "Mereset Password $ni_user - $nama_user");
-  $query = mysqli_query($conn, "UPDATE users SET password = '$ni_user' where id_user = '$id_user'");
-  if ($query) {
-    $_SESSION['sukses'] = true;
-    $_SESSION['msg'] = "Password $nama_user Berhasil di Reset Menjadi No Identitas";
-  } else {
-    $_SESSION['gagal'] = true;
-    $_SESSION['msg'] = "Password $nama_user Gagal di Reset";
-  }
-  header('location:../Admin/daftar-pengguna.php');
-  exit();
-}
 if (isset($_GET['hapus'])) {
-  $id_user = mysqli_escape_string($conn, $_GET['hapus']);
-  $datas = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id_user = '$id_user'"));
-  $ni_user = $datas['ni_user'];
-  $nama_user = $datas['nama_user'];
-  $role_user = $datas['role_user'];
-  tambah_log($_SESSION['id_admin'], "Menghapus $role_user  $ni_user - $nama_user");
-  $query = mysqli_query($conn, "DELETE FROM users WHERE id_user = '$id_user'");
+  $id_buku = mysqli_escape_string($conn, $_GET['hapus']);
+  $query = mysqli_query($conn, "DELETE FROM buku WHERE id_buku = '$id_buku'");
+
   if ($query) {
     $_SESSION['sukses'] = true;
-    $_SESSION['msg'] = "Data $nama_user Berhasil Dihapus";
+    $_SESSION['msg'] = "Data Berhasil Dihapus";
   } else {
     $_SESSION['gagal'] = true;
-    $_SESSION['msg'] = "Data $nama_user Gagal Dihapus";
+    $_SESSION['msg'] = "Data Gagal Dihapus";
   }
-
-  header('location:../Admin/daftar-pengguna.php');
+  header('location: ../Admin/daftar-buku.php');
   exit();
 }
 
@@ -94,7 +71,7 @@ if (isset($_GET['hapus'])) {
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0">Daftar Pengguna</h1>
+              <h1 class="m-0">Daftar Buku</h1>
             </div>
             <!-- /.col -->
           </div>
@@ -109,82 +86,90 @@ if (isset($_GET['hapus'])) {
         <div class="container-fluid">
           <?php if (isset($_SESSION['sukses']) && $_SESSION['sukses']) : ?>
           <div class="alert alert-success alert-dismissible fade show" id="myAlert" role="alert">
-            <strong>Sukses</strong> <?= $_SESSION['msg'] ?>.
+            <strong>Sukses</strong> Data Berhasil di Simpan.
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <?php
             unset($_SESSION['sukses']);
-            unset($_SESSION['msg']);
+          endif; ?>
+
+          <?php if (isset($_SESSION['edit']) && $_SESSION['edit']) : ?>
+          <div class="alert alert-success alert-dismissible fade show" id="myAlert" role="alert">
+            <strong>Sukses</strong> Data Berhasil di Edit.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <?php
+            unset($_SESSION['edit']);
           endif; ?>
 
           <?php if (isset($_SESSION['gagal']) && $_SESSION['gagal']) : ?>
           <div class="alert alert-danger alert-dismissible fade show" id="myAlert" role="alert">
-            <strong>Gagal</strong> <?= $_SESSION['msg'] ?>.
+            <strong>Gagal</strong> Data Gagal di Simpan.
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <?php
             unset($_SESSION['gagal']);
-            unset($_SESSION['msg']);
           endif; ?>
           <div class="row">
             <div class="col-lg-12">
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Data Pengguna Perpustakaan SMK Negeri 2 Bangkalan</h3>
+                  <h3 class="card-title">Data Buku Perpustakaan SMK Negeri 2 Bangkalan</h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
                   <table id="example1" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th>Identitas</th>
-                        <th>Status</th>
-                        <th>Nama</th>
-                        <th>Jenis Kelamin</th>
+                        <th>Kode</th>
+                        <th>Kategori</th>
                         <th>Kelas</th>
-                        <th>Alamat</th>
-                        <th>No HP</th>
+                        <th>Judul</th>
+                        <th>Pengarang</th>
+                        <th>Tahun Terbit</th>
+                        <th>Penerbit</th>
+                        <th>Jumlah</th>
                         <th>Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
                       <?php
-                      foreach ($penggunas as $pengguna) : ?>
+                      foreach ($bukus as $buku) :
+                      ?>
                       <tr>
-                        <td><?= $pengguna['ni_user'] ?></td>
-                        <td><?= $pengguna['role_user'] ?></td>
-                        <td><?= $pengguna['nama_user'] ?></td>
-                        <td><?= $pengguna['jk_user'] ?></td>
-                        <td><?= $pengguna['kelas_user'] ?></td>
-                        <td><?= $pengguna['alamat_user'] ?></td>
-                        <td><?= $pengguna['telp_user'] ?></td>
-                        <td style="width: 100px;">
-                          <a type="button" href="edit-pengguna.php?id=<?= $pengguna['id_user'] ?>"
-                            class=" btn btn-primary btn-sm d-inlinse"><i class='fas fa-pencil-alt'></i></a>
-                          <a href="?hapus=<?= $pengguna['id_user'] ?>"
-                            onclick="return confirm(`Anda Yakin Ingin Menghapus Data <?= $pengguna['nama_user'] ?>`)"
-                            type="button" class="btn btn-danger btn-sm d-inline"><i class='fas fa-trash-alt'></i></a>
-                          <a href="?reset=<?= $pengguna['id_user'] ?>"
-                            onclick="return confirm(`Anda Yakin Ingin Mereset Password <?= $pengguna['nama_user'] ?>`)"
-                            type="button" class="btn btn-warning btn-sm d-inline"><i class='fas fa-key'></i></a>
+                        <td><?= $buku['kode_buku'] ?></td>
+                        <td><?= $buku['kategori_buku'] ?></td>
+                        <td><?= $buku['kelas_buku'] ?></td>
+                        <td><?= $buku['judul_buku'] ?></td>
+                        <td><?= $buku['pengarang'] ?></td>
+                        <td><?= $buku['tahun_terbit'] ?></td>
+                        <td><?= $buku['penerbit'] ?></td>
+                        <td><?= $buku['jumlah_buku'] ?></td>
+                        <td>
+                          <a type="button" href="edit-buku.php?id=<?= $buku['id_buku'] ?>"
+                            class="btn btn-primary btn-sm">Edit</a>
+                          <a href="?hapus=<?= $buku['id_buku'] ?>" type="button" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Anda Yakin Akan Menghapus Data?')">Hapus</a>
                         </td>
                       </tr>
-                      <?php
-                      endforeach ?>
+                      <?php endforeach; ?>
                     </tbody>
                     <tfoot>
                       <tr>
-                        <th>Identitas</th>
-                        <th>Status</th>
-                        <th>Nama</th>
-                        <th>Jenis Kelamin</th>
+                        <th>Kode</th>
+                        <th>Kategori</th>
                         <th>Kelas</th>
-                        <th>Alamat</th>
-                        <th>No HP</th>
+                        <th>Judul</th>
+                        <th>Pengarang</th>
+                        <th>Tahun Terbit</th>
+                        <th>Penerbit</th>
+                        <th>Jumlah</th>
                         <th>Aksi</th>
                       </tr>
                     </tfoot>

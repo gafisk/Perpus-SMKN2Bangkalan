@@ -1,6 +1,11 @@
 <?php
 session_start();
 include('../config/conn.php');
+if (!isset($_SESSION['id_admin']) || empty($_SESSION['id_admin'])) {
+  echo '<script>alert("Silahkan Login Dahulu");</script>';
+  header('Refresh: 1; URL=login_admin.php');
+  exit(); // Hentikan eksekusi script setelah mengarahkan ke halaman login
+}
 
 if (isset($_POST['submit'])) {
 
@@ -17,9 +22,11 @@ if (isset($_POST['submit'])) {
   if (empty($judul) || empty($pengarang) || empty($thn_terbit) || empty($penerbit) || empty($jumlah_buku)) {
     echo "<script>alert('Kolom Inputan Data Buku Tidak Boleh Kosong!');</script>";
   } else {
+
     $query = mysqli_query($conn, "INSERT INTO buku VALUES ('$id_buku', '$kode_buku', '$kategori_buku', '$kelas', '$judul', '$pengarang', '$thn_terbit', '$penerbit', '$jumlah_buku')");
 
     if ($query) {
+      tambah_log($_SESSION['id_admin'], "Menambahkan Buku $kode_buku - $judul");
       $_SESSION['sukses'] = true;
     } else {
       $_SESSION['gagal'] = true;
@@ -41,7 +48,8 @@ if (isset($_POST['submit'])) {
   <div class="wrapper">
     <!-- Preloader -->
     <div class="preloader flex-column justify-content-center align-items-center">
-      <img class="animation__shake" src="../Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60" />
+      <img class="animation__shake" src="../Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60"
+        width="60" />
     </div>
 
     <!-- Navbar -->
@@ -114,11 +122,13 @@ if (isset($_POST['submit'])) {
                     </div>
                     <div class="form-group">
                       <label for="pengarang">Pengarang</label>
-                      <input type="text" name="pengarang" class="form-control" id="pengarang" placeholder="Pengarang Buku">
+                      <input type="text" name="pengarang" class="form-control" id="pengarang"
+                        placeholder="Pengarang Buku">
                     </div>
                     <div class="form-group">
                       <label for="tahun_terbit">Tahun Terbit</label>
-                      <input type="number" name="thn_terbit" class="form-control" id="tahun_terbit" placeholder="Tahun Terbit Buku">
+                      <input type="number" name="thn_terbit" class="form-control" id="tahun_terbit"
+                        placeholder="Tahun Terbit Buku">
                     </div>
                     <div class="form-group">
                       <label for="penerbit">Penerbit</label>
@@ -131,7 +141,8 @@ if (isset($_POST['submit'])) {
                   </div>
                   <!-- /.card-body -->
                   <div class="card-footer">
-                    <button type="submit" name="submit" class="btn btn-primary" onclick="return konfirmSubmit()">Submit</button>
+                    <button type="submit" name="submit" class="btn btn-primary"
+                      onclick="return konfirmSubmit()">Submit</button>
                   </div>
                 </form>
               </div>
@@ -154,12 +165,12 @@ if (isset($_POST['submit'])) {
 
 </html>
 <script>
-  function konfirmSubmit() {
-    var konfirmasi = confirm("Apakah Anda yakin ingin menyimpan data?");
-    if (konfirmasi) {
-      return true;
-    } else {
-      return false;
-    }
+function konfirmSubmit() {
+  var konfirmasi = confirm("Apakah Anda yakin ingin menyimpan data?");
+  if (konfirmasi) {
+    return true;
+  } else {
+    return false;
   }
+}
 </script>

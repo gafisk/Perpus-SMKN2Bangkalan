@@ -3,6 +3,7 @@ Admin = Fitur Denda
         Insert ke Transaksi, ID Admin Belum Dinamis
 
 Users = Tampilan
+        Fitur Daftar Buku
         Fitur Meminjam buku
         Melihat Apa Saja Buku Yang Dipinjam
 

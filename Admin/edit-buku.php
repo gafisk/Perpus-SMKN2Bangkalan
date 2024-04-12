@@ -1,6 +1,11 @@
 <?php
 session_start();
 include('../config/conn.php');
+if (!isset($_SESSION['id_admin']) || empty($_SESSION['id_admin'])) {
+  echo '<script>alert("Silahkan Login Dahulu");</script>';
+  header('Refresh: 1; URL=login_admin.php');
+  exit(); // Hentikan eksekusi script setelah mengarahkan ke halaman login
+}
 
 if (isset($_GET['id'])) {
   $id_buku = mysqli_escape_string($conn, $_GET['id']);
@@ -20,6 +25,7 @@ if (isset($_GET['id'])) {
     } else {
       $query = mysqli_query($conn, "UPDATE buku SET kelas_buku = '$kelas', judul_buku = '$judul', pengarang = '$pengarang', tahun_terbit = '$thn_terbit', penerbit = '$penerbit', jumlah_buku = '$jumlah_buku' WHERE id_buku = '$id_buku'");
       if ($query) {
+        tambah_log($_SESSION['id_admin'], "Mengedit Buku $kode_buku - $judul");
         $_SESSION['edit'] = true;
       } else {
         $_SESSION['gagal'] = true;
@@ -42,7 +48,8 @@ if (isset($_GET['id'])) {
   <div class="wrapper">
     <!-- Preloader -->
     <div class="preloader flex-column justify-content-center align-items-center">
-      <img class="animation__shake" src="../Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60" />
+      <img class="animation__shake" src="../Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60"
+        width="60" />
     </div>
 
     <!-- Navbar -->
@@ -102,11 +109,13 @@ if (isset($_GET['id'])) {
                   <div class="card-body">
                     <div class="form-group">
                       <label for="kode_buku">Kode Buku</label>
-                      <input type="text" name="kode_buku" class="form-control" id="kode_buku" value="<?= $datas['kode_buku'] ?>" disabled>
+                      <input type="text" name="kode_buku" class="form-control" id="kode_buku"
+                        value="<?= $datas['kode_buku'] ?>" disabled>
                     </div>
                     <div class="form-group">
                       <label for="kategori">Kategori Buku</label>
-                      <input type="text" name="kategori_buku" class="form-control" id="kategori" value="<?= $datas['kategori_buku'] ?>" disabled>
+                      <input type="text" name="kategori_buku" class="form-control" id="kategori"
+                        value="<?= $datas['kategori_buku'] ?>" disabled>
                     </div>
                     <div class="form-group">
                       <label>Kelas</label>
@@ -119,28 +128,34 @@ if (isset($_GET['id'])) {
                     </div>
                     <div class="form-group">
                       <label for="judul">Judul</label>
-                      <input type="text" name="judul" class="form-control" id="judul" placeholder="Judul Buku" value="<?= $datas['judul_buku'] ?>">
+                      <input type="text" name="judul" class="form-control" id="judul" placeholder="Judul Buku"
+                        value="<?= $datas['judul_buku'] ?>">
                     </div>
                     <div class="form-group">
                       <label for="pengarang">Pengarang</label>
-                      <input type="text" name="pengarang" class="form-control" id="pengarang" placeholder="Pengarang Buku" value="<?= $datas['pengarang'] ?>">
+                      <input type="text" name="pengarang" class="form-control" id="pengarang"
+                        placeholder="Pengarang Buku" value="<?= $datas['pengarang'] ?>">
                     </div>
                     <div class="form-group">
                       <label for="tahun_terbit">Tahun Terbit</label>
-                      <input type="number" name="thn_terbit" class="form-control" id="tahun_terbit" placeholder="Tahun Terbit Buku" value="<?= $datas['tahun_terbit'] ?>">
+                      <input type="number" name="thn_terbit" class="form-control" id="tahun_terbit"
+                        placeholder="Tahun Terbit Buku" value="<?= $datas['tahun_terbit'] ?>">
                     </div>
                     <div class="form-group">
                       <label for="penerbit">Penerbit</label>
-                      <input type="text" name="penerbit" class="form-control" id="penerbit" placeholder="Penerbit Buku" value="<?= $datas['penerbit'] ?>">
+                      <input type="text" name="penerbit" class="form-control" id="penerbit" placeholder="Penerbit Buku"
+                        value="<?= $datas['penerbit'] ?>">
                     </div>
                     <div class="form-group">
                       <label for="jumlah">Jumlah Buku</label>
-                      <input type="number" name="jml_buku" class="form-control" id="jumlah" placeholder="Jumlah Buku" value="<?= $datas['jumlah_buku'] ?>">
+                      <input type="number" name="jml_buku" class="form-control" id="jumlah" placeholder="Jumlah Buku"
+                        value="<?= $datas['jumlah_buku'] ?>">
                     </div>
                   </div>
                   <!-- /.card-body -->
                   <div class="card-footer">
-                    <button type="submit" name="submit" class="btn btn-primary" onclick="return konfirmSubmit()">Submit</button>
+                    <button type="submit" name="submit" class="btn btn-primary"
+                      onclick="return konfirmSubmit()">Submit</button>
                   </div>
                 </form>
               </div>
@@ -163,12 +178,12 @@ if (isset($_GET['id'])) {
 
 </html>
 <script>
-  function konfirmSubmit() {
-    var konfirmasi = confirm("Apakah Anda yakin ingin Mengedit data?");
-    if (konfirmasi) {
-      return true;
-    } else {
-      return false;
-    }
+function konfirmSubmit() {
+  var konfirmasi = confirm("Apakah Anda yakin ingin Mengedit data?");
+  if (konfirmasi) {
+    return true;
+  } else {
+    return false;
   }
+}
 </script>

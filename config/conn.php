@@ -34,3 +34,10 @@ function get_code_transaksi()
 
   return $kode_transaksi;
 }
+
+function tambah_log($id_admin, $keterangan)
+{
+  global $conn;
+  $id_log = NULL;
+  $query = mysqli_query($conn, "INSERT INTO log VALUES ('$id_log', '$id_admin', NOW(), '$keterangan')");
+}
