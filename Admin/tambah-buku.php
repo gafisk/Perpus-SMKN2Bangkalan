@@ -10,8 +10,8 @@ if (!isset($_SESSION['id_admin']) || empty($_SESSION['id_admin'])) {
 if (isset($_POST['submit'])) {
 
   $id_buku = NULL;
-  $kode_buku = mysqli_escape_string($conn, get_code_buku(strtolower('Pendidikan'))[0]);
-  $kategori_buku = mysqli_escape_string($conn, get_code_buku(strtolower('Pendidikan'))[1]);
+  $kode_buku = mysqli_escape_string($conn, get_code_buku(strtolower('Non Pendidikan'))[0]);
+  $kategori_buku = mysqli_escape_string($conn, get_code_buku(strtolower('Non Pendidikan'))[1]);
   $kelas = mysqli_escape_string($conn, $_POST['kelas']);
   $judul = mysqli_escape_string($conn, $_POST['judul']);
   $pengarang = mysqli_escape_string($conn, $_POST['pengarang']);
@@ -48,8 +48,7 @@ if (isset($_POST['submit'])) {
   <div class="wrapper">
     <!-- Preloader -->
     <div class="preloader flex-column justify-content-center align-items-center">
-      <img class="animation__shake" src="../Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60"
-        width="60" />
+      <img class="animation__shake" src="../Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60" />
     </div>
 
     <!-- Navbar -->
@@ -122,13 +121,11 @@ if (isset($_POST['submit'])) {
                     </div>
                     <div class="form-group">
                       <label for="pengarang">Pengarang</label>
-                      <input type="text" name="pengarang" class="form-control" id="pengarang"
-                        placeholder="Pengarang Buku">
+                      <input type="text" name="pengarang" class="form-control" id="pengarang" placeholder="Pengarang Buku">
                     </div>
                     <div class="form-group">
                       <label for="tahun_terbit">Tahun Terbit</label>
-                      <input type="number" name="thn_terbit" class="form-control" id="tahun_terbit"
-                        placeholder="Tahun Terbit Buku">
+                      <input type="number" name="thn_terbit" class="form-control" id="tahun_terbit" placeholder="Tahun Terbit Buku">
                     </div>
                     <div class="form-group">
                       <label for="penerbit">Penerbit</label>
@@ -141,8 +138,7 @@ if (isset($_POST['submit'])) {
                   </div>
                   <!-- /.card-body -->
                   <div class="card-footer">
-                    <button type="submit" name="submit" class="btn btn-primary"
-                      onclick="return konfirmSubmit()">Submit</button>
+                    <button type="submit" name="submit" class="btn btn-primary" onclick="return konfirmSubmit()">Submit</button>
                   </div>
                 </form>
               </div>
@@ -165,12 +161,12 @@ if (isset($_POST['submit'])) {
 
 </html>
 <script>
-function konfirmSubmit() {
-  var konfirmasi = confirm("Apakah Anda yakin ingin menyimpan data?");
-  if (konfirmasi) {
-    return true;
-  } else {
-    return false;
+  function konfirmSubmit() {
+    var konfirmasi = confirm("Apakah Anda yakin ingin menyimpan data?");
+    if (konfirmasi) {
+      return true;
+    } else {
+      return false;
+    }
   }
-}
 </script>
