@@ -2,8 +2,7 @@
 session_start();
 include('../config/conn.php');
 if (!isset($_SESSION['id_user']) || empty($_SESSION['id_user'])) {
-  echo '<script>alert("Silahkan Login Dahulu");</script>';
-  header('Refresh: 1; URL=../login.php');
+  echo '<script>alert("Silahkan Login Dahulu"); window.location.href="../login.php";</script>';
   exit(); // Hentikan eksekusi script setelah mengarahkan ke halaman login
 }
 $id_user = $_SESSION['id_user'];
@@ -64,8 +63,7 @@ if (isset($_POST['ubah'])) {
   <div class="wrapper">
     <!-- Preloader -->
     <div class="preloader flex-column justify-content-center align-items-center">
-      <img class="animation__shake" src="../Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60"
-        width="60" />
+      <img class="animation__shake" src="../Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60" />
     </div>
 
     <!-- Navbar -->
@@ -107,23 +105,23 @@ if (isset($_POST['ubah'])) {
         <div class="container-fluid">
           <?php
           if (isset($_SESSION['sukses']) && $_SESSION['sukses']) : ?>
-          <div class="alert alert-success alert-dismissible fade show" id="myAlert" role="alert">
-            <strong>Sukses</strong> <?= $_SESSION['msg'] ?>.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
+            <div class="alert alert-success alert-dismissible fade show" id="myAlert" role="alert">
+              <strong>Sukses</strong> <?= $_SESSION['msg'] ?>.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
           <?php
             unset($_SESSION['sukses']);
             unset($_SESSION['msg']);
           endif; ?>
           <?php if (isset($_SESSION['gagal']) && $_SESSION['gagal']) : ?>
-          <div class="alert alert-danger alert-dismissible fade show" id="myAlert" role="alert">
-            <strong>Gagal</strong> <?= $_SESSION['msg'] ?>.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
+            <div class="alert alert-danger alert-dismissible fade show" id="myAlert" role="alert">
+              <strong>Gagal</strong> <?= $_SESSION['msg'] ?>.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
           <?php
             unset($_SESSION['gagal']);
             unset($_SESSION['msg']);
@@ -135,8 +133,7 @@ if (isset($_POST['ubah'])) {
               <div class="card card-primary card-outline">
                 <div class="card-body box-profile">
                   <div class="text-center">
-                    <img class="profile-user-img img-fluid img-circle" src="../Assets/dist/img/users.png"
-                      alt="User profile picture">
+                    <img class="profile-user-img img-fluid img-circle" src="../Assets/dist/img/users.png" alt="User profile picture">
                   </div>
 
                   <h3 class="profile-username text-center"><?= $data_user['nama_user'] ?></h3>
@@ -145,17 +142,16 @@ if (isset($_POST['ubah'])) {
 
                   <ul class="list-group list-group-unbordered mb-3">
                     <li class="list-group-item">
-                      <b><?= ($data_user['role_user'] == 'Siswa') ? 'NISN' : 'NIP' ?></b> <a
-                        class="float-right"><?= $data_user['ni_user'] ?></a>
+                      <b><?= ($data_user['role_user'] == 'Siswa') ? 'NISN' : 'NIP' ?></b> <a class="float-right"><?= $data_user['ni_user'] ?></a>
                     </li>
                     <li class="list-group-item">
                       <b>Jenis Kelamin</b> <a class="float-right"><?= $data_user['jk_user'] ?></a>
                     </li>
                     <?php
                     if ($data_user['role_user'] == 'Siswa') : ?>
-                    <li class="list-group-item">
-                      <b>Kelas</b> <a class="float-right"><?= $data_user['kelas_user'] ?></a>
-                    </li>
+                      <li class="list-group-item">
+                        <b>Kelas</b> <a class="float-right"><?= $data_user['kelas_user'] ?></a>
+                      </li>
                     <?php endif ?>
                   </ul>
                 </div>
@@ -203,41 +199,36 @@ if (isset($_POST['ubah'])) {
                         <div class="form-group row">
                           <label for="inputName" class="col-sm-2 col-form-label">Nama</label>
                           <div class="col-sm-10">
-                            <input type="text" class="form-control" id="inputName" name="nama"
-                              placeholder="Ganti Nama..." value="<?= $data_user['nama_user'] ?>">
+                            <input type="text" class="form-control" id="inputName" name="nama" placeholder="Ganti Nama..." value="<?= $data_user['nama_user'] ?>">
                           </div>
                         </div>
                         <?php if ($data_user['role_user'] == 'Siswa') : ?>
-                        <div class="form-group row">
-                          <label class="col-sm-2 col-form-label">Kelas</label>
-                          <div class="col-sm-10">
-                            <select class="form-control" name="kelas">
-                              <option <?= ($data_user['kelas_user'] == 'X') ? 'selected' : '' ?>>X</option>
-                              <option <?= ($data_user['kelas_user'] == 'XI') ? 'selected' : '' ?>>XI</option>
-                              <option <?= ($data_user['kelas_user'] == 'XII') ? 'selected' : '' ?>>XII</option>
-                            </select>
+                          <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Kelas</label>
+                            <div class="col-sm-10">
+                              <select class="form-control" name="kelas">
+                                <option <?= ($data_user['kelas_user'] == 'X') ? 'selected' : '' ?>>X</option>
+                                <option <?= ($data_user['kelas_user'] == 'XI') ? 'selected' : '' ?>>XI</option>
+                                <option <?= ($data_user['kelas_user'] == 'XII') ? 'selected' : '' ?>>XII</option>
+                              </select>
+                            </div>
                           </div>
-                        </div>
                         <?php endif ?>
                         <div class="form-group row">
                           <label for="inputName2" class="col-sm-2 col-form-label">No Telp</label>
                           <div class="col-sm-10">
-                            <input type="text" class="form-control" id="inputName2" placeholder="No Telp..."
-                              name="no_telp" value="<?= $data_user['telp_user'] ?>">
+                            <input type="text" class="form-control" id="inputName2" placeholder="No Telp..." name="no_telp" value="<?= $data_user['telp_user'] ?>">
                           </div>
                         </div>
                         <div class="form-group row">
                           <label for="inputExperience" class="col-sm-2 col-form-label">Alamat</label>
                           <div class="col-sm-10">
-                            <textarea class="form-control" name="alamat" id="inputExperience"
-                              placeholder="Experience"><?= $data_user['alamat_user'] ?></textarea>
+                            <textarea class="form-control" name="alamat" id="inputExperience" placeholder="Experience"><?= $data_user['alamat_user'] ?></textarea>
                           </div>
                         </div>
                         <div class="form-group row">
                           <div class="offset-sm-2 col-sm-10">
-                            <button type="submit" name="submit"
-                              onclick="return confirm('Anda Yakin Ingin Merubah Data Anda?')"
-                              class="btn btn-danger">Submit</button>
+                            <button type="submit" name="submit" onclick="return confirm('Anda Yakin Ingin Merubah Data Anda?')" class="btn btn-danger">Submit</button>
                           </div>
                         </div>
                       </form>
@@ -259,8 +250,7 @@ if (isset($_POST['ubah'])) {
                         </div>
                         <div class="form-group row">
                           <div class="offset-sm-2 col-sm-10">
-                            <button type="submit" name="ubah"
-                              onclick="return confirm('Anda Yakin Ingin Merubah Password?')" class="btn btn-danger">Ubah
+                            <button type="submit" name="ubah" onclick="return confirm('Anda Yakin Ingin Merubah Password?')" class="btn btn-danger">Ubah
                               Password</button>
                           </div>
                         </div>

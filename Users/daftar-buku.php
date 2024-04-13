@@ -2,8 +2,7 @@
 session_start();
 include('../config/conn.php');
 if (!isset($_SESSION['id_user']) || empty($_SESSION['id_user'])) {
-  echo '<script>alert("Silahkan Login Dahulu");</script>';
-  header('Refresh: 1; URL=../login.php');
+  echo '<script>alert("Silahkan Login Dahulu"); window.location.href="../login.php";</script>';
   exit(); // Hentikan eksekusi script setelah mengarahkan ke halaman login
 }
 

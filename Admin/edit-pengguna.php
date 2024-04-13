@@ -2,8 +2,7 @@
 session_start();
 include('../config/conn.php');
 if (!isset($_SESSION['id_admin']) || empty($_SESSION['id_admin'])) {
-  echo '<script>alert("Silahkan Login Dahulu");</script>';
-  header('Refresh: 1; URL=login_admin.php');
+  echo '<script>alert("Silahkan Login Dahulu"); window.location.href="login_admin.php";</script>';
   exit(); // Hentikan eksekusi script setelah mengarahkan ke halaman login
 }
 
@@ -49,8 +48,7 @@ if (isset($_GET['id'])) {
   <div class="wrapper">
     <!-- Preloader -->
     <div class="preloader flex-column justify-content-center align-items-center">
-      <img class="animation__shake" src="../Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60"
-        width="60" />
+      <img class="animation__shake" src="../Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60" />
     </div>
 
     <!-- Navbar -->
@@ -116,13 +114,11 @@ if (isset($_GET['id'])) {
                     </div>
                     <div class="form-group">
                       <label for="ni">Nomor Identitas</label>
-                      <input type="text" name="identitas" class="form-control" id="ni" placeholder="Identitas Pengguna"
-                        value="<?= $datas['ni_user'] ?>">
+                      <input type="text" name="identitas" class="form-control" id="ni" placeholder="Identitas Pengguna" value="<?= $datas['ni_user'] ?>">
                     </div>
                     <div class="form-group">
                       <label for="nama">Nama</label>
-                      <input type="text" name="nama" class="form-control" id="nama" placeholder="Nama Pengguna"
-                        value="<?= $datas['nama_user'] ?>">
+                      <input type="text" name="nama" class="form-control" id="nama" placeholder="Nama Pengguna" value="<?= $datas['nama_user'] ?>">
                     </div>
                     <div class="form-group">
                       <label for="jk">Jenis Kelamin</label>
@@ -142,20 +138,17 @@ if (isset($_GET['id'])) {
                     </div>
                     <div class="form-group">
                       <label>Alamat</label>
-                      <textarea class="form-control" name="alamat" rows="3"
-                        placeholder="Alamat Pengguna"><?= $datas['alamat_user'] ?></textarea>
+                      <textarea class="form-control" name="alamat" rows="3" placeholder="Alamat Pengguna"><?= $datas['alamat_user'] ?></textarea>
                     </div>
                     <div class="form-group">
                       <label for="no_telp">Nomor Telepon</label>
-                      <input type="text" name="notelp" class="form-control" id="no_telp"
-                        placeholder="Nomor Telepon Pengguna" value="<?= $datas['telp_user'] ?>">
+                      <input type="text" name="notelp" class="form-control" id="no_telp" placeholder="Nomor Telepon Pengguna" value="<?= $datas['telp_user'] ?>">
                     </div>
                   </div>
                   <!-- /.card-body -->
 
                   <div class="card-footer">
-                    <button type="submit" name="submit" class="btn btn-primary"
-                      onclick="return konfirmSubmit()">Submit</button>
+                    <button type="submit" name="submit" class="btn btn-primary" onclick="return konfirmSubmit()">Submit</button>
                   </div>
                 </form>
               </div>
@@ -178,12 +171,12 @@ if (isset($_GET['id'])) {
 
 </html>
 <script>
-function konfirmSubmit() {
-  var konfirmasi = confirm("Apakah Anda yakin ingin mengedit data?");
-  if (konfirmasi) {
-    return true;
-  } else {
-    return false;
+  function konfirmSubmit() {
+    var konfirmasi = confirm("Apakah Anda yakin ingin mengedit data?");
+    if (konfirmasi) {
+      return true;
+    } else {
+      return false;
+    }
   }
-}
 </script>

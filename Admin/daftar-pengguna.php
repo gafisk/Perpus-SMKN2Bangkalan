@@ -2,8 +2,7 @@
 session_start();
 include('../config/conn.php');
 if (!isset($_SESSION['id_admin']) || empty($_SESSION['id_admin'])) {
-  echo '<script>alert("Silahkan Login Dahulu");</script>';
-  header('Refresh: 1; URL=login_admin.php');
+  echo '<script>alert("Silahkan Login Dahulu"); window.location.href="login_admin.php";</script>';
   exit(); // Hentikan eksekusi script setelah mengarahkan ke halaman login
 }
 
@@ -60,8 +59,7 @@ if (isset($_GET['hapus'])) {
   <div class="wrapper">
     <!-- Preloader -->
     <div class="preloader flex-column justify-content-center align-items-center">
-      <img class="animation__shake" src="../Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60"
-        width="60" />
+      <img class="animation__shake" src="../Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60" />
     </div>
 
     <!-- Navbar -->
@@ -108,24 +106,24 @@ if (isset($_GET['hapus'])) {
       <section class="content">
         <div class="container-fluid">
           <?php if (isset($_SESSION['sukses']) && $_SESSION['sukses']) : ?>
-          <div class="alert alert-success alert-dismissible fade show" id="myAlert" role="alert">
-            <strong>Sukses</strong> <?= $_SESSION['msg'] ?>.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
+            <div class="alert alert-success alert-dismissible fade show" id="myAlert" role="alert">
+              <strong>Sukses</strong> <?= $_SESSION['msg'] ?>.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
           <?php
             unset($_SESSION['sukses']);
             unset($_SESSION['msg']);
           endif; ?>
 
           <?php if (isset($_SESSION['gagal']) && $_SESSION['gagal']) : ?>
-          <div class="alert alert-danger alert-dismissible fade show" id="myAlert" role="alert">
-            <strong>Gagal</strong> <?= $_SESSION['msg'] ?>.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
+            <div class="alert alert-danger alert-dismissible fade show" id="myAlert" role="alert">
+              <strong>Gagal</strong> <?= $_SESSION['msg'] ?>.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
           <?php
             unset($_SESSION['gagal']);
             unset($_SESSION['msg']);
@@ -154,25 +152,20 @@ if (isset($_GET['hapus'])) {
                     <tbody>
                       <?php
                       foreach ($penggunas as $pengguna) : ?>
-                      <tr>
-                        <td><?= $pengguna['ni_user'] ?></td>
-                        <td><?= $pengguna['role_user'] ?></td>
-                        <td><?= $pengguna['nama_user'] ?></td>
-                        <td><?= $pengguna['jk_user'] ?></td>
-                        <td><?= $pengguna['kelas_user'] ?></td>
-                        <td><?= $pengguna['alamat_user'] ?></td>
-                        <td><?= $pengguna['telp_user'] ?></td>
-                        <td style="width: 100px;">
-                          <a type="button" href="edit-pengguna.php?id=<?= $pengguna['id_user'] ?>"
-                            class=" btn btn-primary btn-sm d-inlinse"><i class='fas fa-pencil-alt'></i></a>
-                          <a href="?hapus=<?= $pengguna['id_user'] ?>"
-                            onclick="return confirm(`Anda Yakin Ingin Menghapus Data <?= $pengguna['nama_user'] ?>`)"
-                            type="button" class="btn btn-danger btn-sm d-inline"><i class='fas fa-trash-alt'></i></a>
-                          <a href="?reset=<?= $pengguna['id_user'] ?>"
-                            onclick="return confirm(`Anda Yakin Ingin Mereset Password <?= $pengguna['nama_user'] ?>`)"
-                            type="button" class="btn btn-warning btn-sm d-inline"><i class='fas fa-key'></i></a>
-                        </td>
-                      </tr>
+                        <tr>
+                          <td><?= $pengguna['ni_user'] ?></td>
+                          <td><?= $pengguna['role_user'] ?></td>
+                          <td><?= $pengguna['nama_user'] ?></td>
+                          <td><?= $pengguna['jk_user'] ?></td>
+                          <td><?= $pengguna['kelas_user'] ?></td>
+                          <td><?= $pengguna['alamat_user'] ?></td>
+                          <td><?= $pengguna['telp_user'] ?></td>
+                          <td style="width: 100px;">
+                            <a type="button" href="edit-pengguna.php?id=<?= $pengguna['id_user'] ?>" class=" btn btn-primary btn-sm d-inlinse"><i class='fas fa-pencil-alt'></i></a>
+                            <a href="?hapus=<?= $pengguna['id_user'] ?>" onclick="return confirm(`Anda Yakin Ingin Menghapus Data <?= $pengguna['nama_user'] ?>`)" type="button" class="btn btn-danger btn-sm d-inline"><i class='fas fa-trash-alt'></i></a>
+                            <a href="?reset=<?= $pengguna['id_user'] ?>" onclick="return confirm(`Anda Yakin Ingin Mereset Password <?= $pengguna['nama_user'] ?>`)" type="button" class="btn btn-warning btn-sm d-inline"><i class='fas fa-key'></i></a>
+                          </td>
+                        </tr>
                       <?php
                       endforeach ?>
                     </tbody>
@@ -205,11 +198,11 @@ if (isset($_GET['hapus'])) {
 
 </html>
 <script>
-// Ambil elemen alert
-var alert = document.getElementById('myAlert');
+  // Ambil elemen alert
+  var alert = document.getElementById('myAlert');
 
-// Tutup alert setelah 3 detik
-setTimeout(function() {
-  alert.style.display = 'none';
-}, 10000);
+  // Tutup alert setelah 3 detik
+  setTimeout(function() {
+    alert.style.display = 'none';
+  }, 10000);
 </script>

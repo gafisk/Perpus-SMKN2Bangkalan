@@ -2,8 +2,7 @@
 session_start();
 include('../config/conn.php');
 if (!isset($_SESSION['id_user']) || empty($_SESSION['id_user'])) {
-  echo '<script>alert("Silahkan Login Dahulu");</script>';
-  header('Refresh: 1; URL=../login.php');
+  echo '<script>alert("Silahkan Login Dahulu"); window.location.href="../login.php";</script>';
   exit(); // Hentikan eksekusi script setelah mengarahkan ke halaman login
 }
 
@@ -23,8 +22,7 @@ $data_peminjaman = mysqli_query($conn, "SELECT *, NOW() AS waktu_sekarang, CASE 
   <div class="wrapper">
     <!-- Preloader -->
     <div class="preloader flex-column justify-content-center align-items-center">
-      <img class="animation__shake" src="../Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60"
-        width="60" />
+      <img class="animation__shake" src="../Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60" />
     </div>
 
     <!-- Navbar -->
@@ -103,27 +101,27 @@ $data_peminjaman = mysqli_query($conn, "SELECT *, NOW() AS waktu_sekarang, CASE 
               </thead>
               <tbody>
                 <?php foreach ($data_peminjaman as $data) : ?>
-                <tr>
-                  <td>
-                    <?= $data['kode_transaksi'] ?>
-                  </td>
-                  <td>
-                    <a>
-                      <?= $data['judul_buku'] ?>
-                    </a>
-                    <br />
-                    <small>
-                      <?= $data['pengarang'] ?>
-                    </small>
-                  </td>
-                  <td>
-                    <?= $data['tanggal_pinjam'] ?>
-                  </td>
-                  <td>
-                    <?= $data['tanggal_kembali'] ?>
-                  </td>
-                  <td class="project-state">
-                    <?php
+                  <tr>
+                    <td>
+                      <?= $data['kode_transaksi'] ?>
+                    </td>
+                    <td>
+                      <a>
+                        <?= $data['judul_buku'] ?>
+                      </a>
+                      <br />
+                      <small>
+                        <?= $data['pengarang'] ?>
+                      </small>
+                    </td>
+                    <td>
+                      <?= $data['tanggal_pinjam'] ?>
+                    </td>
+                    <td>
+                      <?= $data['tanggal_kembali'] ?>
+                    </td>
+                    <td class="project-state">
+                      <?php
                       if ($data['status'] == 'Kembali') {
                         $warna_bedge = 'badge badge-success';
                       } elseif ($data['keterangan'] == 'Telat') {
@@ -132,10 +130,9 @@ $data_peminjaman = mysqli_query($conn, "SELECT *, NOW() AS waktu_sekarang, CASE 
                         $warna_bedge = 'badge badge-success';
                       }
                       ?>
-                    <span
-                      class="<?= $warna_bedge ?>"><?= ($data['status'] == 'Kembali') ? 'Kembali' : $data['keterangan'] ?></span>
-                  </td>
-                </tr>
+                      <span class="<?= $warna_bedge ?>"><?= ($data['status'] == 'Kembali') ? 'Kembali' : $data['keterangan'] ?></span>
+                    </td>
+                  </tr>
                 <?php endforeach ?>
               </tbody>
             </table>

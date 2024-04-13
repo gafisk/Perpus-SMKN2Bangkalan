@@ -19,8 +19,7 @@ if (isset($_POST['submit'])) {
         $_SESSION['nama_user'] = $row['nama_user'];
         $_SESSION['ni_user'] = $row['ni_user'];
         $_SESSION['role_user'] = $row['role_user'];
-        echo '<script>alert("Anda Berhasil Login. Redirecting...");</script>';
-        header('Refresh: 1; URL=Users/');
+        echo '<script>alert("Anda Berhasil Login. Redirecting..."); window.location.href="Users/";</script>';
         exit();
       } else {
         $_SESSION['gagal'] = true;
