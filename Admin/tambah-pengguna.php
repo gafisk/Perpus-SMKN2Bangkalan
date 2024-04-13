@@ -7,7 +7,7 @@ if (!isset($_SESSION['id_admin']) || empty($_SESSION['id_admin'])) {
 }
 
 if (isset($_POST['submit'])) {
-  $id_user = NULL;
+
   $ni_user = mysqli_escape_string($conn, $_POST['identitas']);
   $nama_user = mysqli_escape_string($conn, $_POST['nama']);
   $jk_user = mysqli_escape_string($conn, $_POST['jk']);
@@ -20,7 +20,7 @@ if (isset($_POST['submit'])) {
   if (empty($ni_user) || empty($nama_user) || empty($jk_user) || empty($alamat_user) || empty($telp_user) || empty($username) || empty($password) || empty($role_user)) {
     echo "<script>alert('Kolom Inputan Data Tidak Boleh Kosong!');</script>";
   } else {
-    $query = mysqli_query($conn, "INSERT INTO users VALUES ('$id_user', '$ni_user', '$nama_user', '$jk_user', '$kelas_user', '$alamat_user', '$telp_user', '$username', '$password', '$role_user')");
+    $query = mysqli_query($conn, "INSERT INTO users VALUES (NULL, '$ni_user', '$nama_user', '$jk_user', '$kelas_user', '$alamat_user', '$telp_user', '$username', '$password', '$role_user')");
     if ($query) {
       tambah_log($_SESSION['id_admin'], "Menambahkan $role_user $ni_user - $nama_user");
       $_SESSION['sukses'] = true;

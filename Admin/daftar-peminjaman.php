@@ -17,12 +17,11 @@ if (isset($_GET['kembali'])) {
     $id_buku = $data_ket['id_buku'];
     $update_buku = mysqli_query($conn, "UPDATE buku SET jumlah_buku = jumlah_buku + 1 WHERE id_buku = '$id_buku'");
     if ($update_buku) {
-      $id_pengembalian = NULL;
       $data_denda = mysqli_fetch_assoc(mysqli_query($conn, "SELECT transaksi.id_transaksi, transaksi.tanggal_kembali, CASE WHEN CURDATE() > transaksi.tanggal_kembali THEN (DATEDIFF(CURDATE(), transaksi.tanggal_kembali) * denda.denda) ELSE 0 END AS total_denda FROM transaksi, denda WHERE transaksi.id_transaksi = '$id_transaksi'"));
       $denda = $data_denda['total_denda'];
       $judul_buku = $data_ket['judul_buku'];
       $nama_user = $data_ket['nama_user'];
-      $insert_pengembalian = mysqli_query($conn, "INSERT INTO pengembalian VALUES ('$id_pengembalian','$id_transaksi','$judul_buku','$nama_user',NOW(),'$denda')");
+      $insert_pengembalian = mysqli_query($conn, "INSERT INTO pengembalian VALUES (NULL,'$id_transaksi','$judul_buku','$nama_user',NOW(),'$denda')");
       if ($insert_pengembalian) {
         $n_log_buku = $data_ket['judul_buku'];
         $k_log_buku = $data_ket['kode_buku'];

@@ -10,7 +10,6 @@ $users = mysqli_query($conn, "SELECT * FROM users");
 $bukus = mysqli_query($conn, "SELECT * FROM buku");
 
 if (isset($_POST['submit'])) {
-  $id_transaksi = NULL;
   $kode_transaksi = get_code_transaksi();
   $id_admin = $_SESSION['id_admin'];
   $id_user = mysqli_escape_string($conn, $_POST['peminjam']);
@@ -23,7 +22,7 @@ if (isset($_POST['submit'])) {
   if (empty($id_user) || empty($id_buku)) {
     echo "<script>alert('Kolom Inputan Data Tidak Boleh Kosong!');</script>";
   } else {
-    $query = mysqli_query($conn, "INSERT INTO transaksi VALUES ('$id_transaksi', '$kode_transaksi', '$id_admin', '$id_user', '$id_buku', NOW(), '$tanggal_kembali', '$status')");
+    $query = mysqli_query($conn, "INSERT INTO transaksi VALUES (NULL, '$kode_transaksi', '$id_admin', '$id_user', '$id_buku', NOW(), '$tanggal_kembali', '$status')");
     if ($query) {
       $kurangi_buku = mysqli_query($conn, "UPDATE buku SET jumlah_buku = jumlah_buku - 1 WHERE id_buku = '$id_buku'");
       $j_log_buku = $data_log_buku['judul_buku'];

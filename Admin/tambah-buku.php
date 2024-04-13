@@ -8,7 +8,6 @@ if (!isset($_SESSION['id_admin']) || empty($_SESSION['id_admin'])) {
 
 if (isset($_POST['submit'])) {
 
-  $id_buku = NULL;
   $kode_buku = mysqli_escape_string($conn, get_code_buku(strtolower('Non Pendidikan'))[0]);
   $kategori_buku = mysqli_escape_string($conn, get_code_buku(strtolower('Non Pendidikan'))[1]);
   $kelas = mysqli_escape_string($conn, $_POST['kelas']);
@@ -22,7 +21,7 @@ if (isset($_POST['submit'])) {
     echo "<script>alert('Kolom Inputan Data Buku Tidak Boleh Kosong!');</script>";
   } else {
 
-    $query = mysqli_query($conn, "INSERT INTO buku VALUES ('$id_buku', '$kode_buku', '$kategori_buku', '$kelas', '$judul', '$pengarang', '$thn_terbit', '$penerbit', '$jumlah_buku')");
+    $query = mysqli_query($conn, "INSERT INTO buku VALUES (NULL, '$kode_buku', '$kategori_buku', '$kelas', '$judul', '$pengarang', '$thn_terbit', '$penerbit', '$jumlah_buku')");
 
     if ($query) {
       tambah_log($_SESSION['id_admin'], "Menambahkan Buku $kode_buku - $judul");
