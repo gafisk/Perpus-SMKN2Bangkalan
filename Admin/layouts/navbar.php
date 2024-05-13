@@ -113,6 +113,14 @@
                 </ul>
               </li>
               <li class="nav-item">
+                <a href="laporan.php" class="nav-link">
+                  <i class="nav-icon fas fa-file-alt"></i>
+                  <p>
+                    Laporan
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="logout_admin.php" class="nav-link" onclick="return confirm('Anda Yakin Akan Logout?')">
                   <i class="nav-icon fas fa-power-off"></i>
                   <p>

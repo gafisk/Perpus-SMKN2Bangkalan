@@ -7,16 +7,19 @@ if (!isset($_SESSION['id_admin']) || empty($_SESSION['id_admin'])) {
 }
 
 if (isset($_POST['submit'])) {
-
-  $kode_buku = mysqli_escape_string($conn, get_code_buku(strtolower('Non Pendidikan'))[0]);
-  $kategori_buku = mysqli_escape_string($conn, get_code_buku(strtolower('Non Pendidikan'))[1]);
-  $kelas = mysqli_escape_string($conn, $_POST['kelas']);
+  include('../config/naive_bayes.php');
+  $dataset = load_dataset($conn);
+  $model = train_naive_bayes($dataset);
   $judul = mysqli_escape_string($conn, $_POST['judul']);
+  $kat = classify_naive_bayes($model, $judul);
+  
+  $kode_buku = mysqli_escape_string($conn, get_code_buku(strtolower($kat))[0]);
+  $kategori_buku = mysqli_escape_string($conn, get_code_buku(strtolower($kat))[1]);
+  $kelas = mysqli_escape_string($conn, $_POST['kelas']);
   $pengarang = mysqli_escape_string($conn, $_POST['pengarang']);
   $thn_terbit = mysqli_escape_string($conn, $_POST['thn_terbit']);
   $penerbit = mysqli_escape_string($conn, $_POST['penerbit']);
   $jumlah_buku = mysqli_escape_string($conn, $_POST['jml_buku']);
-
   if (empty($judul) || empty($pengarang) || empty($thn_terbit) || empty($penerbit) || empty($jumlah_buku)) {
     echo "<script>alert('Kolom Inputan Data Buku Tidak Boleh Kosong!');</script>";
   } else {
@@ -46,7 +49,8 @@ if (isset($_POST['submit'])) {
   <div class="wrapper">
     <!-- Preloader -->
     <div class="preloader flex-column justify-content-center align-items-center">
-      <img class="animation__shake" src="../Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60" />
+      <img class="animation__shake" src="../Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60"
+        width="60" />
     </div>
 
     <!-- Navbar -->
@@ -119,11 +123,13 @@ if (isset($_POST['submit'])) {
                     </div>
                     <div class="form-group">
                       <label for="pengarang">Pengarang</label>
-                      <input type="text" name="pengarang" class="form-control" id="pengarang" placeholder="Pengarang Buku">
+                      <input type="text" name="pengarang" class="form-control" id="pengarang"
+                        placeholder="Pengarang Buku">
                     </div>
                     <div class="form-group">
                       <label for="tahun_terbit">Tahun Terbit</label>
-                      <input type="number" name="thn_terbit" class="form-control" id="tahun_terbit" placeholder="Tahun Terbit Buku">
+                      <input type="number" name="thn_terbit" class="form-control" id="tahun_terbit"
+                        placeholder="Tahun Terbit Buku">
                     </div>
                     <div class="form-group">
                       <label for="penerbit">Penerbit</label>
@@ -136,7 +142,8 @@ if (isset($_POST['submit'])) {
                   </div>
                   <!-- /.card-body -->
                   <div class="card-footer">
-                    <button type="submit" name="submit" class="btn btn-primary" onclick="return konfirmSubmit()">Submit</button>
+                    <button type="submit" name="submit" class="btn btn-primary"
+                      onclick="return konfirmSubmit()">Submit</button>
                   </div>
                 </form>
               </div>
@@ -159,12 +166,12 @@ if (isset($_POST['submit'])) {
 
 </html>
 <script>
-  function konfirmSubmit() {
-    var konfirmasi = confirm("Apakah Anda yakin ingin menyimpan data?");
-    if (konfirmasi) {
-      return true;
-    } else {
-      return false;
-    }
+function konfirmSubmit() {
+  var konfirmasi = confirm("Apakah Anda yakin ingin menyimpan data?");
+  if (konfirmasi) {
+    return true;
+  } else {
+    return false;
   }
+}
 </script>

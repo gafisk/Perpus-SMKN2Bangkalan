@@ -56,7 +56,8 @@ if (isset($_POST['submit'])) {
   <div class="wrapper">
     <!-- Preloader -->
     <div class="preloader flex-column justify-content-center align-items-center">
-      <img class="animation__shake" src="../Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60" />
+      <img class="animation__shake" src="../Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60"
+        width="60" />
     </div>
 
     <!-- Navbar -->
@@ -119,8 +120,8 @@ if (isset($_POST['submit'])) {
                       <select name="peminjam" class="form-control select2bs4" style="width: 100%;">
                         <option value="">Pilih Data Peminjam</option>
                         <?php foreach ($users as $user) : ?>
-                          <option value="<?= $user['id_user'] ?>">
-                            <?= $user['ni_user'] ?> - <?= $user['nama_user'] ?> - <?= $user['kelas_user'] ?></option>
+                        <option value="<?= $user['id_user'] ?>">
+                          <?= $user['ni_user'] ?> - <?= $user['nama_user'] ?> - <?= $user['kelas_user'] ?></option>
                         <?php endforeach; ?>
                       </select>
                     </div>
@@ -130,8 +131,9 @@ if (isset($_POST['submit'])) {
                       <select name="buku" class="form-control select2bs4" style="width: 100%;">
                         <option value="">Pilih Data Buku</option>
                         <?php foreach ($bukus as $buku) : ?>
-                          <option <?= ($buku["jumlah_buku"] == 0) ? "disabled='disabled'" : "" ?> value="<?= $buku['id_buku'] ?>"><?= $buku['kode_buku'] ?> - <?= $buku['judul_buku'] ?> -
-                            <?= $buku['jumlah_buku'] ?> </option>
+                        <option <?= ($buku["jumlah_buku"] == 0) ? "disabled='disabled'" : "" ?>
+                          value="<?= $buku['id_buku'] ?>"><?= $buku['kode_buku'] ?> - <?= $buku['judul_buku'] ?> -
+                          <?= $buku['jumlah_buku'] ?> </option>
                         <?php endforeach; ?>
                       </select>
                     </div>
@@ -175,55 +177,55 @@ if (isset($_POST['submit'])) {
 
 </html>
 <script>
-  var nBulan = 2;
+var nBulan = 6;
 
-  function formatDate(date) {
-    var dd = String(date.getDate()).padStart(2, '0');
-    var mm = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
-    var yyyy = date.getFullYear();
-    return yyyy + '-' + mm + '-' + dd;
+function formatDate(date) {
+  var dd = String(date.getDate()).padStart(2, '0');
+  var mm = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
+  var yyyy = date.getFullYear();
+  return yyyy + '-' + mm + '-' + dd;
+}
+
+function setTanggal() {
+  var today = new Date();
+  var tgl_pinjam = formatDate(today); // 'YYYY-MM-DD'
+
+  if (document.getElementById('tgl_pinjam')) {
+    document.getElementById('tgl_pinjam').value = tgl_pinjam;
   }
 
-  function setTanggal() {
-    var today = new Date();
-    var tgl_pinjam = formatDate(today); // 'YYYY-MM-DD'
+  var nextDate = new Date(today);
+  nextDate.setMonth(nextDate.getMonth() + nBulan);
+  var tgl_kembali = formatDate(nextDate); // 'YYYY-MM-DD'
 
-    if (document.getElementById('tgl_pinjam')) {
-      document.getElementById('tgl_pinjam').value = tgl_pinjam;
-    }
+  if (document.getElementById('tgl_kembali')) {
+    document.getElementById('tgl_kembali').value = tgl_kembali;
+  }
+}
 
-    var nextDate = new Date(today);
+setTimeout(setTanggal, 100);
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('tgl_pinjam').addEventListener('change', function() {
+    var selectedDate = new Date(this.value);
+    var nextDate = new Date(selectedDate);
     nextDate.setMonth(nextDate.getMonth() + nBulan);
     var tgl_kembali = formatDate(nextDate); // 'YYYY-MM-DD'
 
     if (document.getElementById('tgl_kembali')) {
       document.getElementById('tgl_kembali').value = tgl_kembali;
     }
-  }
-
-  setTimeout(setTanggal, 100);
-
-  document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('tgl_pinjam').addEventListener('change', function() {
-      var selectedDate = new Date(this.value);
-      var nextDate = new Date(selectedDate);
-      nextDate.setMonth(nextDate.getMonth() + nBulan);
-      var tgl_kembali = formatDate(nextDate); // 'YYYY-MM-DD'
-
-      if (document.getElementById('tgl_kembali')) {
-        document.getElementById('tgl_kembali').value = tgl_kembali;
-      }
-    });
   });
+});
 
 
 
-  function konfirmSubmit() {
-    var konfirmasi = confirm("Apakah Anda yakin ingin menyimpan data?");
-    if (konfirmasi) {
-      return true;
-    } else {
-      return false;
-    }
+function konfirmSubmit() {
+  var konfirmasi = confirm("Apakah Anda yakin ingin menyimpan data?");
+  if (konfirmasi) {
+    return true;
+  } else {
+    return false;
   }
+}
 </script>
