@@ -29,6 +29,7 @@ if (isset($_POST['submit'])) {
     if ($query) {
       tambah_log($_SESSION['id_admin'], "Menambahkan Buku $kode_buku - $judul");
       $_SESSION['sukses'] = true;
+      $_SESSION['msg'] = "Berhasil Ditambahkan <br> Kategori $kategori_buku : $judul";
     } else {
       $_SESSION['gagal'] = true;
     }
