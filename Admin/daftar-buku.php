@@ -22,6 +22,20 @@ if (isset($_GET['hapus'])) {
   exit();
 }
 
+function arrayToString($array) {
+  $result = '';
+  foreach ($array as $key => $value) {
+      $result .= $key . ': ' . number_format($value * 100, 2) . '%, ';
+  }
+  return rtrim($result, ', ');
+}
+
+if (isset($_SESSION['prob']) && is_array($_SESSION['prob'])) {
+  $prob_string = arrayToString($_SESSION['prob']);
+} else {
+  $prob_string = '';
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -84,13 +98,14 @@ if (isset($_GET['hapus'])) {
         <div class="container-fluid">
           <?php if (isset($_SESSION['sukses']) && $_SESSION['sukses']) : ?>
           <div class="alert alert-success alert-dismissible fade show" id="myAlert" role="alert">
-            <strong>Sukses</strong> <?= $_SESSION['msg'] ?>.
+            <strong>Sukses</strong> <?= $_SESSION['msg'] ?>. <br> <?=($prob_string !== '') ? $prob_string : '' ?>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <?php
             unset($_SESSION['sukses']);
+            unset($_SESSION['prob']);
             unset($_SESSION['msg']);
           endif; ?>
 
