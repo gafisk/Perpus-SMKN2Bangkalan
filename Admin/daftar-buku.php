@@ -165,7 +165,7 @@ if (isset($_SESSION['prob']) && is_array($_SESSION['prob'])) {
                         <td><?= $buku['tahun_terbit'] ?></td>
                         <td><?= $buku['penerbit'] ?></td>
                         <td><?= $buku['jumlah_buku'] ?></td>
-                        <td>
+                        <td class="d-flex">
                           <a type="button" href="edit-buku.php?id=<?= $buku['id_buku'] ?>"
                             class="btn btn-primary btn-sm">Edit</a>
                           <a href="?hapus=<?= $buku['id_buku'] ?>" type="button" class="btn btn-danger btn-sm"
